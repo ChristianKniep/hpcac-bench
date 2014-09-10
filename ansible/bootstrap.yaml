@@ -1,0 +1,23 @@
+---
+- hosts: venus
+  remote_user: root
+  vars:
+    docker_socket: tcp://0.0.0.0:6000
+    docker_data: /var/lib/docker/
+  tasks:
+  - name: create cluser group
+    action: group name=cluser gid=2000 system=no
+  - name: create user(s)
+    action: user name=cluser group=cluser shell=/bin/bash uid=2000
+  - name: ensure docker is at the latest version
+    yum: pkg=docker state=latest
+  - name: write the docker systemd script
+    template: src=templates/docker.service.j2 dest=/usr/lib/systemd/system/docker.service
+    notify:
+      - restart docker
+  - name: ensure docker is running
+    service: name=docker state=started
+  handlers:
+    - name: restart docker
+      service: name=docker state=restarted
+  
