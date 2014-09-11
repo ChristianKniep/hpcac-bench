@@ -1,0 +1,13 @@
+---
+- name: ensure some default rpm to be installed
+  tags:
+    - pkg
+    - env
+  yum: pkg={{ item }} state=latest
+  with_items:
+     - vim
+     - htop
+     - openmpi
+     - infiniband-diags 
+     - libmlx4
+     - perftest

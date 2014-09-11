@@ -1,0 +1,37 @@
+---
+- hosts: all
+  remote_user: root
+  vars:
+    docker_socket: tcp://0.0.0.0:6000
+    docker_data: /var/lib/docker/
+  tasks:
+  - name: add base repository
+    copy: src=files/etc/yum.repos.d/base.repo dest=/etc/yum.repos.d/base.repo owner=root group=root mode=0644
+  - name: add epel repository
+    copy: src=files/etc/yum.repos.d/epel.repo dest=/etc/yum.repos.d/epel.repo owner=root group=root mode=0644
+  - include: tasks/basic_pkg.yml
+  - include: tasks/docker.yml
+  - include: tasks/cluster_env.yml
+  - name: stop firewalld
+    service: name=firewalld state=stopped enabled=no
+  - name: disable selinux
+    selinux: state=disabled
+  handlers:
+  - include: handlers/services.yml
+  
+- hosts: master
+  remote_user: root
+  tasks:
+  - include: tasks/create_shares.yml
+  - include: tasks/nfs.yml
+  - include: tasks/users.yml
+  - include: tasks/start_reg.yml
+  - include: tasks/compile_hpcc.yml
+
+- hosts: slaves
+  remote_user: root
+  vars:
+  tasks:
+  - include: tasks/nfs-clients.yml nfsserver={{ groups.master[0] }} nfspath=/opt/nfs/chome nfsmount=/chome
+  - include: tasks/nfs-clients.yml nfsserver={{ groups.master[0] }} nfspath=/opt/nfs/scratch nfsmount=/scratch
+  - include: tasks/users.yml

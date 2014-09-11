@@ -1,0 +1,44 @@
+# This playbook setup nfs (http://nfs.sourceforge.net/) capability.
+#
+# Copyright (c) 2013-2014 Fabian Affolter <fabian@affolter-engineering.ch>
+#
+# Licensed under CC BY 3.0. All rights reserved.
+#
+---
+- name: install nfs package
+  yum: pkg={{ item }}
+       state=present 
+  with_items:
+    - nfs-utils
+
+- name: add an export
+  lineinfile: dest=/etc/exports
+              regexp=''
+              insertafter=EOF
+              line='/opt/nfs/ *(rw,nohide,insecure,no_subtree_check,sync)'
+
+- name: start nfs-server
+  service: name=nfs-server
+           state=running
+           enabled=yes
+
+
+#- name: configure firewall, allow traffic to port 1883
+#  firewalld: aervice=nfs
+#             permanent=true
+#             state=enabled
+
+#- name: start rpcbind
+#  service: name=rpcbind
+#           state=running
+#           enabled=yes
+
+#- name: start nfs-idmap
+#  service: name=nfs-idmap
+#           state=running
+#           enabled=yes
+
+#- name: start nfs-lock
+#  service: name=nfs-lock
+#           state=running
+#           enabled=yes

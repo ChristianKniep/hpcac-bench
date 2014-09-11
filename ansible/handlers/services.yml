@@ -1,0 +1,50 @@
+# This files contains service handlers for Fedora.
+#
+# Copyright (c) 2013-2014 Fabian Affolter <fabian@affolter-engineering.ch>
+#
+# Licensed under CC BY 3.0. All rights reserved.
+#
+# Usage:
+#  handlers:
+#    - include: handlers/services.yml
+#
+---
+# Control handlers for docker
+- name: start docker
+  service: name=docker state=started
+
+- name: stop docker
+  service: name=docker state=stopped
+
+- name: restart docker
+  service: name=docker state=restarted
+
+# Control handlers for sshd
+- name: start sshd
+  service: name=sshd state=started
+
+- name: stop sshd
+  service: name=sshd state=stopped
+
+- name: restart sshd
+  service: name=sshd state=restarted
+
+# Control handlers for nfs-server
+- name: start nfs-server
+  service: name=nfs-server state=started
+
+- name: stop nfs-server
+  service: name=nfs-server state=stopped
+
+- name: restart nfs-server
+  service: name=nfs-server state=restarted
+
+# Control handlers for mosquitto
+- name: start mosquitto
+  service: name=mosquitto state=started
+
+- name: stop mosquitto
+  service: name=mosquitto state=stopped
+
+- name: restart mosquitto
+  service: name=mosquitto state=restarted
