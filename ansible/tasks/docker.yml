@@ -1,6 +1,7 @@
 ---
 - name: ensure docker-io is at the latest version
-  yum: pkg=docker-io state=latest
+  yum: pkg=docker state=latest
+  when: ansible_distribution == "CentOS"
   tags:
      - docker
 - name: write the docker systemd script
@@ -16,15 +17,18 @@
 
 - name: add dummy docker rpm
   copy: src=files/yum-cache/docker-1.0-1.x86_64.rpm dest=/tmp/docker-1.0-1.x86_64.rpm owner=root group=root mode=0644
+  when: ansible_distribution == "RHEL"
   tags:
      - docker
 
 - name: install dummy docker-rpm to satisfy docker-py
   yum: name=/tmp/docker-1.0-1.x86_64.rpm state=present
+  when: ansible_distribution == "RHEL"
   tags:
      - docker
 - name: add python-docker-py
   yum: pkg={{ item }} state=latest
+  when: ansible_distribution == "RHEL"
   with_items:
      - python-docker-py
   tags:

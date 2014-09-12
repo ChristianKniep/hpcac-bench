@@ -9,38 +9,38 @@
   tags:
      - devel
 
-- name: Load module mpi
-  action: shell source /etc/profile ; module unload mpi ; module load {{ item }}
-  with_items:
-     - mpi/openmpi
-  tags:
-     - devel
-
+#- name: Load module mpi
+#  action: shell source /etc/profile ; module unload mpi ; module load {{ item }}
+#  with_items:
+#     - mpi/openmpi
+#  tags:
+#     - devel
+#
 - name: copy hpcg
-  copy: src=files/{{ item }} dest=/scratch/{{ item }}
+  copy: src=files/{{ item }} dest=/opt/{{ item }}
   with_items:
      - hpcg-2.4.tar.gz
   tags:
      - devel
-
-- name: unpack hpcg
-  command: tar xf hpcg-2.4.tar.gz
-  args:
-    chdir: /scratch/
-  tags:
-     - devel
-
-- name: configure
-  tags:
-     - devel
-  action: shell mkdir -p BM_OMP-SYS_BUILD ; cd BM_OMP-SYS_BUILD ; ../configure MPI_GCC_OMP
-  args:
-    chdir: /scratch/hpcg-2.4
-
-- name: make
-  tags:
-     - devel
-  action: shell source /etc/profile; module load mpi/openmpi-x86_64; make -j4
-  args:
-    chdir: /scratch/hpcg-2.4/BM_OMP-SYS_BUILD
-
+#
+#- name: unpack hpcg
+#  command: tar xf hpcg-2.4.tar.gz
+#  args:
+#    chdir: /scratch/
+#  tags:
+#     - devel
+#
+#- name: configure
+#  tags:
+#     - devel
+#  action: shell mkdir -p BM_OMP-SYS_BUILD ; cd BM_OMP-SYS_BUILD ; ../configure MPI_GCC_OMP
+#  args:
+#    chdir: /scratch/hpcg-2.4
+#
+#- name: make
+#  tags:
+#     - devel
+#  action: shell source /etc/profile; module load mpi/openmpi-x86_64; make -j4
+#  args:
+#    chdir: /scratch/hpcg-2.4/BM_OMP-SYS_BUILD
+#

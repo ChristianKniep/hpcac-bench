@@ -2,5 +2,6 @@
 - name: create cluser group
   action: group name=cluser gid=2000 system=no
 - name: create user(s)
-  action: user name=cluser group=cluser home=/chome/cluser shell=/bin/bash uid=2000
+  action: user name=cluser group=cluser shell=/bin/bash uid=2000 
+          password=$6$rounds=100000$gjLEKhffjnqA9RVk$ozbs/udKWitmRv42JKNLo.7xUTiyShrXuo6tS6hnp5JSM4FlPwMogf6ugH2Ayt9jMxVenoTDOvYyO5P5WZODZ/
 

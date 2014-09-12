@@ -50,15 +50,17 @@
 - name: create bare-metal directory
   tags:
     - env
-  file: path=/scratch/bare-metal/
+  file: path=/home/cluser/bare-metal/
         mode=0755
+        owner=cluser
         state=directory
 
 - name: create bare-metal mfiles
   tags:
     - env
-  file: path=/scratch/bare-metal/{{ item }}
+  file: path=/home/cluser/bare-metal/{{ item }}
         mode=0755
+        owner=cluser
         state=touch
   with_items:
     - mfile_all
@@ -66,7 +68,7 @@
 - name: "Build mfile file"
   tags:
     - env
-  lineinfile: dest=/scratch/bare-metal/mfile_all regexp='.*{{ item }}$' line="{{item}}" state=present
+  lineinfile: dest=/home/cluser/bare-metal/mfile_all regexp='.*{{ item }}$' line="{{item}}" state=present
   with_items: groups['all']
 
 - name: Load IB modules
