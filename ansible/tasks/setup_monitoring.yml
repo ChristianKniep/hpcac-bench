@@ -1,0 +1,30 @@
+---
+- name: ensure monitoring rpms to be installed
+  tags:
+    - mon
+  yum: pkg={{ item }} state=latest
+  with_items:
+     - python-diamond
+     - python-pysensors
+     - lm_sensors
+     - lm_sensors-libs
+     - ntpdate
+
+- name: Copy diamond configuration
+  tags: mon
+  copy: src=files/etc/diamond/{{ item }} dest=/etc/diamond/{{ item }} owner=root group=root mode=0644
+  with_items:
+      - diamond.conf
+      - handlers/GraphiteHandler.conf 
+      - collectors/MemoryCollector.conf
+      - collectors/CPUCollector.conf
+      - collectors/LMSensorsCollector.conf
+
+- name: Copy diamond systemd service
+  tags: mon
+  copy: src=files/usr/lib/systemd/system/diamond.service dest=/usr/lib/systemd/system/diamond.service owner=root group=root mode=0644
+
+- name: start diamond
+  tags: mon
+  service: name=diamond state=started enabled=yes
+

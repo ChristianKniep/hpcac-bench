@@ -8,7 +8,7 @@
   - name: add repositories
     tags: base
     copy: src=files/etc/yum.repos.d/{{ item }}.repo dest=/etc/yum.repos.d/{{ item }}.repo owner=root group=root mode=0644
-    with-items:
+    with_items:
       - qnib
       - epel
   - include: tasks/basic_pkg.yml
@@ -21,13 +21,14 @@
   - name: disable selinux
     tags: base
     selinux: state=disabled
+  - include: tasks/setup_monitoring.yml
   handlers:
   - include: handlers/services.yml
   
 - hosts: master
   remote_user: root
   tasks:
-  #- include: tasks/create_shares.yml
+  - include: tasks/create_mfiles.yml
   #- include: tasks/nfs.yml
   #- include: tasks/start_reg.yml
   - include: tasks/compile_hpcc.yml
