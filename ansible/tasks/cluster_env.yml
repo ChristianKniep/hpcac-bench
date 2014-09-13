@@ -52,7 +52,7 @@
     - env
   lineinfile:
     dest=/etc/bashrc
-    line="export LD_LIBRARY_PATH=/usr/local/lib/"
+    line="export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/"
     regexp=".*export LD_LIBRARY_PATH="
     owner=root
     state=present
