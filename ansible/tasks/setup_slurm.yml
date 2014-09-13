@@ -24,27 +24,27 @@
   when: "'master' in group_names"
   tags:
     - slurm
-  notify: restart slurmctld
+  #notify: restart slurmctld
 
 - name: configure slurm (client)
   action: template src=templates/usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
   when: "'clients' in group_names"
   tags: slurm
-  notify: restart slurmd
+  #notify: restart slurmd
 
-- name: munged service
-  tags:
-    - slurm
-  action: service name=munged state=started enabled=yes
-
-- name: slurmd service
-  action: service name=slurmd state=started enabled=yes
-  when: "'clients' in group_names"
-  tags:
-    - slurm
-
-- name: slurmctld service
-  action: service name=slurmctld state=started enabled=yes
-  when: "'master' in group_names"
-  tags:
-    - slurm
+#- name: munged service
+#  tags:
+#    - slurm
+#  action: service name=munged state=started enabled=yes
+#
+#- name: slurmd service
+#  action: service name=slurmd state=started enabled=yes
+#  when: "'clients' in group_names"
+#  tags:
+#    - slurm
+#
+#- name: slurmctld service
+#  action: service name=slurmctld state=started enabled=yes
+#  when: "'master' in group_names"
+#  tags:
+#    - slurm
