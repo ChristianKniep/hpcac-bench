@@ -47,6 +47,18 @@
     insertafter=EOF
     create=True
 
+- name: LD_LIBRARY_PATH to find libmunge
+  tags:
+    - env
+  lineinfile:
+    dest=/etc/bashrc
+    line="export LD_LIBRARY_PATH=/usr/local/lib/"
+    regexp=".*export LD_LIBRARY_PATH="
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
 - name: Load IB modules
   tags:
     - env

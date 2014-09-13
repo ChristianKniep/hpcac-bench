@@ -5,3 +5,20 @@
   action: user name=cluser group=cluser shell=/bin/bash uid=2000 
           password=$6$rounds=100000$gjLEKhffjnqA9RVk$ozbs/udKWitmRv42JKNLo.7xUTiyShrXuo6tS6hnp5JSM4FlPwMogf6ugH2Ayt9jMxVenoTDOvYyO5P5WZODZ/
 
+- name: create slurm group
+  tags: slurm
+  action: group name=slurm gid=5000 system=no
+
+- name: create slurm user
+  tags: slurm
+  action: user name=slurm group=slurm shell=/bin/false uid=5000 createhome=no home=/opt/slurm
+
+- name: create slurm directories
+  file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
+
+- name: enable munge service
+  service: name=munge state=started enabled=yes
+
+- name: enable slurm service startup
+  service: name=slurm state=started enabled=yes
+

@@ -22,6 +22,7 @@
     tags: base
     selinux: state=disabled
   - include: tasks/setup_monitoring.yml
+  - include: tasks/setup_slurm.yml
   handlers:
   - include: handlers/services.yml
   

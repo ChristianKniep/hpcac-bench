@@ -16,7 +16,7 @@
         state=touch
   with_items:
     - mfile_all
-    - mfile_slaves
+    - mfile_clients
 
 - name: "Build cluster mfile"
   tags:
@@ -24,8 +24,8 @@
   lineinfile: dest=/home/cluser/bare-metal/mfile_all regexp='.*{{ item }}$' line="{{item}}" state=present
   with_items: groups['all']
 
-- name: "Build slaves mfile"
+- name: "Build clients mfile"
   tags:
     - env
-  lineinfile: dest=/home/cluser/bare-metal/mfile_slaves regexp='.*{{ item }}$' line="{{item}}" state=present
-  with_items: groups['slaves']
+  lineinfile: dest=/home/cluser/bare-metal/mfile_clients regexp='.*{{ item }}$' line="{{item}}" state=present
+  with_items: groups['clients']
