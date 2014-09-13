@@ -80,7 +80,7 @@
   lineinfile: 
      dest=/etc/security/limits.conf regexp='.*\s+soft\s+memlock' 
      insertafter=EOF 
-     line='*               soft    memlock          1048576'
+     line='*               soft    memlock          25165824'
 - name: Configuring hard memlock
   tags:
     - limits
@@ -88,7 +88,7 @@
   lineinfile: 
      dest=/etc/security/limits.conf regexp='.*\s+hard\s+memlock' 
      insertafter=EOF 
-     line='*               hard    memlock          1048576'
+     line='*               hard    memlock          25165824'
 
 - name: Configuring soft nproc
   tags:

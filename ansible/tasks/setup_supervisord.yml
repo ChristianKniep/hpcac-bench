@@ -1,0 +1,11 @@
+---
+- name: ensure supervisor rpms and dependencies are installed
+  yum: pkg={{ item }} state=latest
+  tags: super
+  with_items:
+     - python-supervisor
+
+- name: create a supervisord dir
+  tags:
+    - super
+  file: path=/etc/supervisord.d/ mode=0755 state=directory

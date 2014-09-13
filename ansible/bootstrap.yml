@@ -22,6 +22,7 @@
     tags: base
     selinux: state=disabled
   - include: tasks/setup_monitoring.yml
+  - include: tasks/setup_supervisord.yml
   - include: tasks/setup_slurm.yml
   handlers:
   - include: handlers/services.yml
@@ -34,7 +35,7 @@
   #- include: tasks/start_reg.yml
   - include: tasks/compile_hpcc.yml
 
-- hosts: slaves
+- hosts: clients
   remote_user: root
   vars:
   tasks:
