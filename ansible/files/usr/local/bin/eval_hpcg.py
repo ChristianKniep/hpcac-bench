@@ -52,12 +52,13 @@ def main():
         (key, val) = fetch_ele(obj, key_dic)
         res[short_key] = val
     msg = []
-    msg.append("## TIME:%(time.total)s | GFLOP/s: %(gflops)s" % res)
-    msg.append("# #PROC:%(mach.num_proc)s | #THREADS/PROC: %(mach.threads_per_proc)s" % res)
-    msg.append("# Problem dimenstion: %(problem.dim.x)sx%(problem.dim.y)sx%(problem.dim.z)s" % res)
-    msg.append("# Local dimensions: %(local.dim.x)sx%(local.dim.y)sx%(local.dim.z)s" % res)
-    print "\n".join(msg)
-    print res
+    msg.append("TIME:%(time.total)s" % res)
+    msg.append("GFLOP/s:%(gflops)s" % res)
+    msg.append("#THREADS/PROC: %(mach.threads_per_proc)s" % res)
+    msg.append("#PROC:%(mach.num_proc)s" % res)
+    msg.append("Problem:%(problem.dim.x)sx%(problem.dim.y)sx%(problem.dim.z)s" % res)
+    msg.append("Local:%(local.dim.x)sx%(local.dim.y)sx%(local.dim.z)s" % res)
+    print " | ".join(msg)
     
 # ein Aufruf von main() ganz unten
 if __name__ == "__main__":
