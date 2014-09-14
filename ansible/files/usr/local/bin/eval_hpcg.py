@@ -33,7 +33,6 @@ def main():
     with open(options.get("<file>"), "r") as fd:
         lines = fd.readlines()
     obj = yaml.load("\n".join([line.rstrip() for line in lines if re.match("^\s*\w+.*\:", line)]))
-    pprint(obj)
     res_map = {
         "time.total": ['Benchmark Time Summary', 'Total'],
         "problem.dim.x": ['Global Problem Dimensions', 'Global nx'],
