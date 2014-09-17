@@ -184,5 +184,5 @@ SlurmdLogFile=/var/log/slurm/slurmd.log
 NodeName={{host}} 
 {% endfor %}
 PartitionName=clients Nodes={% for host in groups['clients'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
-PartitionName=all Nodes={% for host in groups['all'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
+PartitionName=slurm Nodes={% for host in groups['slurm'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
 

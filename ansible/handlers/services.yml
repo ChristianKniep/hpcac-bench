@@ -52,8 +52,8 @@
 - name: restart diamond
   service: name=diamond state=restarted
 # slurm
-- name: restart munge
-  service: name=munge state=restarted
+- name: restart munged
+  service: name=munged state=restarted
 - name: restart slurmd
   supervisorctl: name=slurmd state=restarted
 - name: restart slurmctld
