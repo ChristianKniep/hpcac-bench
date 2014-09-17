@@ -37,9 +37,12 @@
   tags: slurm
   #notify: restart slurmd
 
-
 - name: enable munged service
   service: name=munged state=started enabled=yes
 
 - name: enable slurmd service startup
   supervisorctl: name=slurmd state=started
+
+- name: create slurm directories
+  file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
+
