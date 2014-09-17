@@ -15,6 +15,7 @@
 - name: ensure some default rpm to be installed
   tags:
     - openmpi
+    - ib
   yum: pkg={{ item }} state=latest
   with_items:
      - vim
@@ -25,3 +26,5 @@
      - infiniband-diags 
      - libmlx4
      - perftest
+     #- python-pip
+

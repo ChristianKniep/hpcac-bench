@@ -47,3 +47,7 @@
     insertafter=EOF
     create=True
 
+- name: Copydocker startscript (since docker-py failed for me)
+  tags: docker
+  copy: src=files/usr/local/bin/start_container.sh dest=/usr/local/bin/start_container.sh owner=root group=root mode=0755
+
