@@ -32,6 +32,8 @@ def main():
     options =  docopt(__doc__, version='0.1')
     with open(options.get("<file>"), "r") as fd:
         lines = fd.readlines()
+    reg = "(?P<jobid>\d+//HPCG-Benchmark-\d\.\d_(?P<date>[0-9\.]+\.yaml"
+    
     obj = yaml.load("\n".join([line.rstrip() for line in lines if re.match("^\s*\w+.*\:", line)]))
     res_map = {
         "time.total": ['Benchmark Time Summary', 'Total'],
