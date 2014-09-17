@@ -1,0 +1,46 @@
+---
+- name: ensure slurm rpms and dependencies are installed
+  yum: pkg={{ item }} state=latest
+  tags: slurm
+  with_items:
+     - slurm
+
+- name: create a slurm config dir
+  tags: slurm
+  file: path=/etc/slurm/ mode=0755 state=directory
+
+- name: create slurm dirs
+  tags: slurm
+  file: path=/var/{{ item }}/slurm/ owner=slurm mode=0755 state=directory
+  with_items:
+    - lib
+    - log
+    - run
+
+- name: create slurm directories
+  tags: slurm
+  file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
+
+- name: configure slurm (master)
+  action: template src=usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
+  when: is_master is defined 
+  tags: slurm
+  notify: restart slurmctld
+
+- name: configure slurm (client)
+  action: template src=usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
+  when: is_client is defined 
+  tags: slurm
+  notify: restart slurmd
+
+- name: create slurm directories
+  tags: slurm
+  file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
+
+- name: enable munged service
+  service: name=munged state=started enabled=yes
+
+- name: enable slurmd service startup
+  supervisorctl: name=slurmd state=started
+
+

@@ -1,0 +1,27 @@
+---
+- name: create bare-metal directory
+  tags: slurm
+  file: path=/home/cluser/bare-metal/
+        mode=0755
+        owner=cluser
+        state=directory
+
+- name: create bare-metal mfiles
+  tags: slurm
+  file: path=/home/cluser/bare-metal/{{ item }}
+        mode=0755
+        owner=cluser
+        state=touch
+  with_items:
+    - mfile_all
+    - mfile_clients
+
+- name: "Build cluster mfile"
+  tags: slurm
+  lineinfile: dest=/home/cluser/bare-metal/mfile_all regexp='.*{{ item }}$' line="{{item}}" state=present
+  with_items: groups['all']
+
+- name: "Build clients mfile"
+  tags: slurm
+  lineinfile: dest=/home/cluser/bare-metal/mfile_clients regexp='.*{{ item }}$' line="{{item}}" state=present
+  with_items: groups['clients']

@@ -1,0 +1,10 @@
+---
+# Control handlers for docker
+- name: start docker
+  service: name=docker state=started
+
+- name: stop docker
+  service: name=docker state=stopped
+
+- name: restart docker
+  service: name=docker state=restarted

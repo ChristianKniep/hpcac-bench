@@ -1,0 +1,10 @@
+---
+- hosts: all
+  user: root
+  roles:
+    - common
+    - cluster
+    - docker
+    - monitoring
+    - slurm
+

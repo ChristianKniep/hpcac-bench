@@ -1,0 +1,5 @@
+---
+- name: restart slurmd
+  supervisorctl: name=slurmd state=restarted
+- name: restart slurmctld
+  service: name=slurmd state=restarted

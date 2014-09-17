@@ -1,0 +1,5 @@
+---
+- include: base_setup.yml
+- include: basic_pkg.yml
+- include: users.yml
+- include: setup_supervisord.yml

@@ -1,0 +1,40 @@
+---
+# Control handlers for sshd
+- name: start sshd
+  service: name=sshd state=started
+
+- name: stop sshd
+  service: name=sshd state=stopped
+
+- name: restart sshd
+  service: name=sshd state=restarted
+
+# Control handlers for nfs-server
+- name: start nfs-server
+  service: name=nfs-server state=started
+
+- name: stop nfs-server
+  service: name=nfs-server state=stopped
+
+- name: restart nfs-server
+  service: name=nfs-server state=restarted
+
+# Control handlers for mosquitto
+- name: start mosquitto
+  service: name=mosquitto state=started
+
+- name: stop mosquitto
+  service: name=mosquitto state=stopped
+
+- name: restart mosquitto
+  service: name=mosquitto state=restarted
+
+- name: restart diamond
+  service: name=diamond state=restarted
+# slurm
+- name: restart munged
+  service: name=munged state=restarted
+- name: restart slurmd
+  supervisorctl: name=slurmd state=restarted
+- name: restart slurmctld
+  service: name=slurmd state=restarted

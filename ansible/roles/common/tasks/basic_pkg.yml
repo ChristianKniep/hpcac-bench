@@ -1,0 +1,31 @@
+---
+- name: Check the installed openmpi version
+  tags:
+    - openmpi
+  command: rpm -q openmpi
+  register: rpm_check
+  ignore_errors: yes
+
+- name: remove the openmpi-1.8 rpm
+  tags:
+    - openmpi
+  yum: name=openmpi state=absent
+  when: rpm_check.stdout.find('openmpi-1.8') != -1
+
+- name: ensure some default rpm to be installed
+  tags:
+    - openmpi
+    - ib
+  yum: pkg={{ item }} state=latest
+  with_items:
+     - vim
+     - nc
+     - tmux
+     - screen
+     - openmpi
+     - infiniband-diags 
+     - libmlx4
+     - perftest
+     - ntpdate
+     #- python-pip
+

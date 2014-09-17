@@ -1,0 +1,109 @@
+---
+- name: source /etc/profile
+  tags:
+    - env
+  lineinfile:
+    dest=/etc/bashrc
+    line="source /etc/profile"
+    regexp=".*source /etc/profile"
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+- name: module unload mpi
+  tags:
+    - env
+  lineinfile:
+    dest=/etc/bashrc
+    line="module unload mpi"
+    regexp=".*module unload mpi"
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+- name: module load mpi/openmpi
+  tags:
+    - env
+  lineinfile:
+    dest=/etc/bashrc
+    line="module load mpi/openmpi-x86_64"
+    regexp=".*module load mpi/openmpi-x86_64"
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+- name: OMP_NUM_THREADS
+  tags:
+    - env
+  lineinfile:
+    dest=/etc/bashrc
+    line="export OMP_NUM_THREADS=4"
+    regexp=".*OMP_NUM_THREADS="
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+- name: LD_LIBRARY_PATH to find libmunge
+  tags:
+    - env
+  lineinfile:
+    dest=/etc/bashrc
+    line="export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/"
+    regexp=".*export LD_LIBRARY_PATH="
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+- name: Load IB modules
+  tags:
+    - env
+    - ib
+  modprobe: name={{ item }} state=present
+  with_items:
+    - mlx4_ib
+    - ib_umad
+    - ib_uverbs
+    - ib_ipoib
+    - rdma_cm
+    - rdma_ucm
+
+# Configure open file limits
+- name: Configuring soft memlock
+  tags:
+    - limits
+    - env
+  lineinfile: 
+     dest=/etc/security/limits.conf regexp='.*\s+soft\s+memlock' 
+     insertafter=EOF 
+     line='*               soft    memlock          25165824'
+- name: Configuring hard memlock
+  tags:
+    - limits
+    - env
+  lineinfile: 
+     dest=/etc/security/limits.conf regexp='.*\s+hard\s+memlock' 
+     insertafter=EOF 
+     line='*               hard    memlock          25165824'
+
+- name: Configuring soft nproc
+  tags:
+    - limits
+    - env
+  lineinfile: 
+     dest=/etc/security/limits.conf regexp='.*\s+soft\s+nproc' 
+     insertafter=EOF 
+     line='*               soft    nproc            10000'
+
+- name: Configuring hard nproc
+  tags:
+    - limits
+    - env
+  lineinfile: 
+     dest=/etc/security/limits.conf regexp='.*\s+hard\s+nproc' 
+     insertafter=EOF 
+     line='*               hard    nproc            10000'
