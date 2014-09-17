@@ -15,24 +15,24 @@
   tags:
      - docker
 
-- name: add dummy docker rpm
-  copy: src=files/yum-cache/docker-1.0-1.x86_64.rpm dest=/tmp/docker-1.0-1.x86_64.rpm owner=root group=root mode=0644
-  when: ansible_distribution == "RHEL"
-  tags:
-     - docker
-
-- name: install dummy docker-rpm to satisfy docker-py
-  yum: name=/tmp/docker-1.0-1.x86_64.rpm state=present
-  when: ansible_distribution == "RHEL"
-  tags:
-     - docker
-- name: add python-docker-py
-  yum: pkg={{ item }} state=latest
-  when: ansible_distribution == "RHEL"
-  with_items:
-     - python-docker-py
-  tags:
-     - docker
+#- name: add dummy docker rpm
+#  copy: src=files/yum-cache/docker-1.0-1.x86_64.rpm dest=/tmp/docker-1.0-1.x86_64.rpm owner=root group=root mode=0644
+#  when: ansible_distribution == "RHEL"
+#  tags:
+#     - docker
+#
+#- name: install dummy docker-rpm to satisfy docker-py
+#  yum: name=/tmp/docker-1.0-1.x86_64.rpm state=present
+#  when: ansible_distribution == "RHEL"
+#  tags:
+#     - docker
+#
+#- name: add python-docker-py
+#  yum: pkg={{ item }} state=latest
+#  with_items:
+#     - python-docker-py
+#  tags:
+#     - docker
 
 - name: Update bashrc for DOCKER_HOST
   tags:

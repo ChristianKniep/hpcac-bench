@@ -35,6 +35,11 @@
   #- include: tasks/start_reg.yml
   - include: tasks/compile_hpcc.yml
 
+- hosts: docker-server
+  remote_user: root
+  tasks:
+  - include: tasks/start_reg.yml
+
 - hosts: clients
   remote_user: root
   vars:

@@ -4,7 +4,6 @@
     image=registry env="STORAGE_PATH=/registry" 
     volumes="/var/lib/docker-registry:/registry" 
     name=registry state=running 
-    registry=10.0.0.1:5005
     docker_url=tcp://localhost:6000
   tags:
     - docker

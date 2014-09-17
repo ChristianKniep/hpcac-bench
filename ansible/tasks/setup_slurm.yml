@@ -32,19 +32,9 @@
   tags: slurm
   #notify: restart slurmd
 
-#- name: munged service
-#  tags:
-#    - slurm
-#  action: service name=munged state=started enabled=yes
-#
-#- name: slurmd service
-#  action: service name=slurmd state=started enabled=yes
-#  when: "'clients' in group_names"
-#  tags:
-#    - slurm
-#
-#- name: slurmctld service
-#  action: service name=slurmctld state=started enabled=yes
-#  when: "'master' in group_names"
-#  tags:
-#    - slurm
+
+- name: enable munge service
+  service: name=munge state=started enabled=yes
+
+- name: enable slurmd service startup
+  supervisorctl: name=slurmd state=started

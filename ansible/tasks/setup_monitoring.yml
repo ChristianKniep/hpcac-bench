@@ -19,6 +19,7 @@
       - collectors/MemoryCollector.conf
       - collectors/CPUCollector.conf
       - collectors/LMSensorsCollector.conf
+  notify: restart diamond
 
 - name: Copy diamond systemd service
   tags: mon
