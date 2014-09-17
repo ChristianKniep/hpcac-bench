@@ -19,6 +19,13 @@
     - log
     - run
 
+- name: create slurm directories
+  tags:
+  - slurm
+  file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
+
+
+
 - name: configure slurm (master)
   action: template src=templates/usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
   when: "'master' in group_names"
