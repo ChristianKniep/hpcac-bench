@@ -5,22 +5,11 @@
     docker_socket: tcp://0.0.0.0:6000
     docker_data: /var/lib/docker/
   tasks:
-  - name: add repositories
-    tags: base
-    copy: src=files/etc/yum.repos.d/{{ item }}.repo dest=/etc/yum.repos.d/{{ item }}.repo owner=root group=root mode=0644
-    with_items:
-      - qnib
-      - epel
+  - include: tasks/base_setup.yaml
   - include: tasks/basic_pkg.yml
   - include: tasks/users.yml
   - include: tasks/docker.yml
   - include: tasks/cluster_env.yml
-  - name: stop firewalld
-    tags: base
-    service: name=firewalld state=stopped enabled=no
-  - name: disable selinux
-    tags: base
-    selinux: state=disabled
   - include: tasks/setup_monitoring.yml
   - include: tasks/setup_supervisord.yml
   - include: tasks/setup_slurm.yml
