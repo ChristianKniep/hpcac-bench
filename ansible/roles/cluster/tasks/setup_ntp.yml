@@ -2,26 +2,31 @@
 - name: Install ntp on master
   tags: ntp
   yum: pkg={{ item }} state=latest
-  when: is_master is defined
+  when: is_master is defined and not ntp_server is defined
   with_items:
      - ntp
 
 - name: enable ntpd service
   tags: ntp
-  when: is_master is defined
+  when: is_master is defined and not ntp_server is defined
   service: name=ntpd state=started enabled=yes
 
 - name: Install ntpdate on clients
   tags: ntp
   yum: pkg={{ item }} state=latest
-  when: is_client is defined
+  when: is_client is defined or ntp_server is defined
   with_items:
      - ntpdate
 
 - name: Update time from master once
   tags: ntp
-  when: not is_master is defined
+  when: not ntp_server is defined
   command: ntpdate {{ groups['master'][0] }}
+
+- name: Update time from ntp_server
+  tags: ntp
+  when: ntp_server is defined
+  command: ntpdate {{ ntp_server }}
 
 - name: Set timezone
   tags: ntp
