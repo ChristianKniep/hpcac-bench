@@ -14,8 +14,7 @@
 
 - name: ensure some default rpm to be installed
   tags:
-    - openmpi
-    - ib
+    - rpm
   yum: pkg={{ item }} state=latest
   with_items:
      - vim
@@ -27,5 +26,6 @@
      - libmlx4
      - perftest
      - ntpdate
-     #- python-pip
+     - python-docopt
+     - python-pyyaml
 
