@@ -1,0 +1,19 @@
+#!/bin/bash
+#SBATCH --ntasks-per-node={{ ansible_processor_cores }}
+#SBATCH --workdir={{ home_dir }}/cluser/
+
+# ENV
+source /etc/bashrc
+module unload mpi
+module load mpi/{{ mpi_version }}
+# \ENV
+
+mkdir -p BARE/${SLURM_JOBID}
+cd BARE/${SLURM_JOBID}
+cp /opt/hpcg/input_files/hpcg_{{ node_job }}.dat hpcg.dat
+
+
+mpirun --mca btl "self,openib"  {{ hpcg_dir }}/BM_OMP-SYS/bin/xhpcg
+
+eval_hpcg.py HPCG-Benchmark-*.yaml
+

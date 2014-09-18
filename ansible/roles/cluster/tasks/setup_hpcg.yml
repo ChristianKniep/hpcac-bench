@@ -1,0 +1,27 @@
+---
+- name: create input_files directory
+  tags: hpcg
+  file: path=/opt/hpcg/{{ item }} mode=0755 state=directory
+  with_items:
+  - input_files
+  - job_scripts
+
+- name: copy input files
+  tags: hpcg
+  copy: src=opt/hpcg/input_files/{{ item }} dest=/opt/hpcg/input_files/{{ item }} owner=root group=root mode=0644
+  with_items:
+      - hpcg_23939.dat 
+      - hpcg_5796.dat
+      - hpcg_16-120.dat
+      - hpcg_96-300.dat
+
+- name: create run_hpcg script for different hosts
+  tags: hpcg
+  action: template src=run_xhpcg.sh.j2 dest=/opt/hpcg/job_scripts/run_xhpcg.sh owner=root group=root mode=0755
+ 
+- name: copy helper scripts
+  tags: hpcg
+  copy: src=usr/local/bin/{{ item }} dest=/usr/local/bin/{{ item }} owner=root group=root mode=0755
+  with_items:
+  - eval_hpcg.py
+

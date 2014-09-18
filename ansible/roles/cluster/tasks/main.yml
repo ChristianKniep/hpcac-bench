@@ -1,3 +1,4 @@
 ---
 - include: cluster_env.yml   
 - include: setup_ntp.yml
+- include: setup_hpcg.yml
