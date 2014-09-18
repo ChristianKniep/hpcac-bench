@@ -12,8 +12,8 @@ mkdir -p BARE/${SLURM_JOBID}
 cd BARE/${SLURM_JOBID}
 cp /opt/hpcg/input_files/hpcg_{{ node_job }}.dat hpcg.dat
 
-
+echo "## $(date +'%F %H:%M:%S') Start mpirun with '{{ node_job }}' input deck"
 mpirun --mca btl "self,openib"  {{ hpcg_dir }}/BM_OMP-SYS/bin/xhpcg
-
+echo "## $(date +'%F %H:%M:%S') Job ends"
 eval_hpcg.py HPCG-Benchmark-*.yaml
 
