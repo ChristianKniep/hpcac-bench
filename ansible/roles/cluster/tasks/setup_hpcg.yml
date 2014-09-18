@@ -10,14 +10,12 @@
   tags: hpcg
   copy: src=opt/hpcg/input_files/{{ item }} dest=/opt/hpcg/input_files/{{ item }} owner=root group=root mode=0644
   with_items:
-      - hpcg_23939.dat 
-      - hpcg_5796.dat
       - hpcg_16-120.dat
       - hpcg_96-300.dat
 
-- name: create run_hpcg script for different hosts
-  tags: hpcg
-  action: template src=run_xhpcg.sh.j2 dest=/opt/hpcg/job_scripts/run_xhpcg.sh owner=root group=root mode=0755
+- include: create_run_script.yml name=2min job_time=120
+- include: create_run_script.yml name=5min job_time=300
+- include: create_run_script.yml name=30min job_time=1800
  
 - name: copy helper scripts
   tags: hpcg
