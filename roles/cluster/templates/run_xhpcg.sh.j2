@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --ntasks-per-node={{ ansible_processor_cores }}
+#SBATCH --ntasks-per-node={{ ansible_processor_vcpus }}
 #SBATCH --workdir={{ home_dir }}/cluser/
 
 # ENV

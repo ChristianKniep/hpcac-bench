@@ -1,1 +1,2 @@
 is_master: true
+is_nfs_server: true

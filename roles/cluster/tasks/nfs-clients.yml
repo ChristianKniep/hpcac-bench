@@ -22,12 +22,11 @@
   tags: 
     - nfs
 
-- name: Ensure {{ nfsmount }} directory exists
-  action: file path={{ nfsmount }} state=directory
-  tags: 
-    - nfs
+- name: create the mountpoint {{ nfsmount }}
+  tags: nfs
+  file: path={{ nfsmount }} mode=0755 state=directory
 
 - name: configure /etc/fstab on clients
-  action: mount name={{ nfsmount }} src={{ nfsserver }}:{{ nfspath }} fstype=nfs4 opts="_netdev,auto" state=mounted
+  action: mount name={{ nfsmount }} src={{ nfs_server }}:{{ nfspath }} fstype=nfs4 opts="_netdev,auto" state=mounted
   tags:
     - nfs

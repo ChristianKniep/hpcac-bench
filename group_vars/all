@@ -2,7 +2,10 @@ home_dir: /chome
 docker_data: /var/lib/docker/
 docker_socket: tcp://0.0.0.0:6000
 time_zone: Europe/Berlin
-ntp_server: sanju0
 mpi_version: openmpi-x86_64
 
 node_job: 96-300
+hpcg_dir: /scratch/hpcg-2.4/
+nfs_server: venus001
+job_size: 96
+job_time: 300

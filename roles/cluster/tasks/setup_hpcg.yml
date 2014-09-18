@@ -15,7 +15,11 @@
 
 - include: create_run_script.yml name=2min job_time=120
 - include: create_run_script.yml name=5min job_time=300
+- include: create_run_script.yml name=5min_124 job_time=300 job_size=124
 - include: create_run_script.yml name=30min job_time=1800
+- include: create_run_script.yml name=30min_124 job_time=1800 job_size=124
+- include: create_run_script.yml name=6h job_time=21600
+- include: create_run_script.yml name=6h_124 job_time=21600 job_size=124
  
 - name: copy helper scripts
   tags: hpcg

@@ -34,13 +34,17 @@
 - name: configure slurm (master)
   action: template src=usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
   when: is_master is defined 
-  tags: slurm
+  tags: 
+  - slurm
+  - cfg
   notify: restart slurmctld
 
 - name: configure slurm (client)
   action: template src=usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
   when: is_client is defined 
-  tags: slurm
+  tags:
+  - slurm
+  - cfg
   notify: restart slurmd
 
 - name: create slurm directories
