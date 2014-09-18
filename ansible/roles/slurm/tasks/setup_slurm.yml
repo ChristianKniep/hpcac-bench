@@ -28,6 +28,7 @@
   service: name=munged state=started enabled=yes
 
 - name: enable slurmd service startup
+  tags: slurm
   supervisorctl: name=slurmd state=started
 
 - name: configure slurm (master)

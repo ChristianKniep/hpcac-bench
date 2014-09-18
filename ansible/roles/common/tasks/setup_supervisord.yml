@@ -9,6 +9,17 @@
   tags: super
   file: path=/etc/supervisord.d/ mode=0755 state=directory
 
+- name: create a supervisord log dir
+  tags: super
+  file: path=/var/log/supervisor mode=0755 state=directory
+
 - name: add /etc/supervisord.conf
   tags: super
   copy: src=etc/supervisord.conf dest=/etc/supervisord.conf owner=root group=root mode=0644
+
+- name: start supervisord if socket-file is missing
+  tags: super
+  command: supervisord -c /etc/supervisord.conf
+  args:
+    creates: /var/tmp/supervisor.sock
+
