@@ -1,0 +1,30 @@
+# This playbook setup nfs (http://nfs.sourceforge.net/) capability.
+#
+# Copyright (c) 2013-2014 Fabian Affolter <fabian@affolter-engineering.ch>
+#
+# Licensed under CC BY 3.0. All rights reserved.
+#
+---
+- name: install nfs package
+  tags: nfs
+  yum: pkg={{ item }}
+       state=present 
+  when: is_nfs_server is defined
+  with_items:
+    - nfs-utils
+
+- name: add an export
+  tags: nfs
+  when: is_nfs_server is defined
+  lineinfile: dest=/etc/exports
+              regexp=''
+              insertafter=EOF
+              line='/opt/nfs/ *(rw,nohide,insecure,no_subtree_check,sync)'
+
+- name: start nfs-server
+  tags: nfs
+  when: is_nfs_server is defined
+  service: name=nfs-server
+           state=running
+           enabled=yes
+

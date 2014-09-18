@@ -1,4 +1,6 @@
 ---
 - include: cluster_env.yml   
 - include: setup_ntp.yml
+- include: nfs-server.yml
+- include: nfs-client.yml 
 - include: setup_hpcg.yml

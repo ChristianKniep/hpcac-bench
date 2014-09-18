@@ -1,0 +1,22 @@
+# This playbook setup nfs (http://nfs.sourceforge.net/) capability.
+#
+# Copyright (c) 2013-2014 Fabian Affolter <fabian@affolter-engineering.ch>
+#
+# Licensed under CC BY 3.0. All rights reserved.
+#
+---
+- name: create a chome directory to share
+  file: path=/opt/nfs/chome/
+        mode=0755
+        state=directory
+
+- name: create a scratch directory to share
+  file: path=/opt/nfs/scratch/
+        mode=0777
+        state=directory
+
+- name: Create symlink 
+  file: src=/opt/nfs/{{ item }} dest=/{{ item }} owner=root group=root state=link
+  with_items:
+     - chome
+     - scratch
