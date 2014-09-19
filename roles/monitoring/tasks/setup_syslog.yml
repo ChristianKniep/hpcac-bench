@@ -1,0 +1,26 @@
+---
+- name: Fetch list of installed rpms
+  tags: 
+  - rpm
+  - syslog
+  command: yum list installed
+  register: yum_list
+  ignore_errors: yes
+#*.* @@venus008:514
+
+
+- name: Insert rsyslog-forward to docker-host (if rsyslog)
+  tags: 
+  - env
+  - syslog
+  when: yum_list.stdout.find('rsyslog') != -1
+  lineinfile:
+    dest=/etc/rsyslog.conf
+    line="*.* @@{{ groups['docker_server'][0] }}:514"
+    regexp="^\*\.\* @@{{ groups['docker_server'][0] }}:514"
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+  notify: restart rsyslog
+
