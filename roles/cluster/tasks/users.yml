@@ -1,0 +1,74 @@
+---
+- name: create cluser group
+  tags:
+  - user
+  action: group name=cluser gid=2000 system=no
+- name: create user(s)
+  tags:
+  - user
+  action: user name=cluser home={{ home_dir }}/cluser group=cluser shell=/bin/bash uid=2000  createhome=no
+          password=$6$rounds=100000$gjLEKhffjnqA9RVk$ozbs/udKWitmRv42JKNLo.7xUTiyShrXuo6tS6hnp5JSM4FlPwMogf6ugH2Ayt9jMxVenoTDOvYyO5P5WZODZ/
+
+- name: create a cluser home directory to share
+  tags: user
+  when: is_nfs_server is defined
+  file: path=/opt/nfs/chome/cluser
+        mode=0755
+        owner=cluser
+        group=cluser
+        state=directory
+
+- name: create a clusers ssh directory
+  tags: user
+  when: is_nfs_server is defined
+  file: path=/opt/nfs/chome/cluser/.ssh
+        mode=0700
+        owner=cluser
+        group=cluser
+        state=directory
+
+- name: copy ssh_key
+  when: is_nfs_server is defined
+  tags: user
+  copy: src=ssh/{{ item }} dest=/opt/nfs/chome/cluser/.ssh/{{ item }} 
+        mode=0600 owner=cluser group=cluser
+  with_items:
+     - id_rsa
+
+- name: copy public ssh_key stuff
+  when: is_nfs_server is defined
+  tags: user
+  copy: src=ssh/{{ item }} dest=/opt/nfs/chome/cluser/.ssh/{{ item }} 
+        mode=0644 owner=cluser group=cluser
+  with_items:
+     - id_rsa.pub
+     - authorized_keys
+     - config
+
+- name: copy .bash*
+  when: is_nfs_server is defined
+  tags: user
+  copy: src=cluser/{{ item }} dest=/opt/nfs/chome/cluser/.{{ item }}
+        mode=0644 owner=cluser group=cluser
+  with_items:
+  - bashrc
+  - bash_profile
+
+- name: create slurm group
+  tags:
+  - user
+  - slurm
+  action: group name=slurm gid=5000 system=no
+
+- name: create slurm user
+  tags:
+  - user
+  - slurm
+  action: user name=slurm group=slurm shell=/bin/false uid=5000 createhome=no home=/opt/slurm
+
+- name: create slurm directories
+  tags:
+  - slurm
+  file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
+
+
