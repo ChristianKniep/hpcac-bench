@@ -7,4 +7,9 @@
   vars:
    nfsmount: /scratch
    nfspath: /opt/nfs/scratch 
+- include: nfs-clients.yml 
+  vars:
+   nfsmount: /chome
+   nfspath: /opt/nfs/chome 
+- include: users.yml
 - include: setup_hpcg.yml

@@ -3,23 +3,23 @@
   tags: hpcg
   file: path=/opt/hpcg/{{ item }} mode=0755 state=directory
   with_items:
-  - input_files
+#  - input_files
   - job_scripts
 
-- name: copy input files
-  tags: hpcg
-  copy: src=opt/hpcg/input_files/{{ item }} dest=/opt/hpcg/input_files/{{ item }} owner=root group=root mode=0644
-  with_items:
-      - hpcg_16-120.dat
-      - hpcg_96-300.dat
+#- name: copy input files
+#  tags: hpcg
+#  copy: src=opt/hpcg/input_files/{{ item }} dest=/opt/hpcg/input_files/{{ item }} owner=root group=root mode=0644
+#  with_items:
+#      - hpcg_16-120.dat
+#      - hpcg_96-300.dat
 
 - include: create_run_script.yml name=2min job_time=120
 - include: create_run_script.yml name=5min job_time=300
-- include: create_run_script.yml name=5min_124 job_time=300 job_size=124
+- include: create_run_script.yml name=5min_128 job_time=300 job_size=128
 - include: create_run_script.yml name=30min job_time=1800
-- include: create_run_script.yml name=30min_124 job_time=1800 job_size=124
+- include: create_run_script.yml name=30min_128 job_time=1800 job_size=128
 - include: create_run_script.yml name=6h job_time=21600
-- include: create_run_script.yml name=6h_124 job_time=21600 job_size=124
+- include: create_run_script.yml name=6h_128 job_time=21600 job_size=128
  
 - name: copy helper scripts
   tags: hpcg

@@ -1,6 +1,7 @@
 #!/bin/bash
 #SBATCH --ntasks-per-node={{ ansible_processor_vcpus }}
 #SBATCH --workdir={{ home_dir }}/cluser/
+#SBATCH --job-name={{ job_size }}_{{ job_time }}
 
 # ENV
 source /etc/bashrc
@@ -17,7 +18,7 @@ Sandia National Laboratories; University of Tennessee, Knoxville
 {{ job_time }}
 EOF
 
-echo "## $(date +'%F %H:%M:%S') Start mpirun with '{{ node_job }}' input deck"
+echo "## $(date +'%F %H:%M:%S') Start mpirun with '{{ job_size }}^3 in {{ job_time }}sec' input deck"
 mpirun --mca btl "self,openib"  {{ hpcg_dir }}/BM_OMP-SYS/bin/xhpcg
 echo "## $(date +'%F %H:%M:%S') Job ends"
 eval_hpcg.py HPCG-Benchmark-*.yaml
