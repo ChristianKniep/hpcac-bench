@@ -2,6 +2,7 @@
 - name: Check the installed openmpi version
   tags:
     - openmpi
+  when: not is_container is defined
   command: rpm -q openmpi
   register: rpm_check
   ignore_errors: yes
@@ -9,12 +10,13 @@
 - name: remove the openmpi-1.8 rpm
   tags:
     - openmpi
+  when: not is_container is defined and rpm_check.stdout.find('openmpi-1.8') != -1
   yum: name=openmpi state=absent
-  when: rpm_check.stdout.find('openmpi-1.8') != -1
 
 - name: ensure some default rpm are present
   tags:
     - rpm
+  when: not is_container is defined
   yum: pkg={{ item }} state=present
   with_items:
      - vim
@@ -28,4 +30,6 @@
      - ntpdate
      - python-docopt
      - PyYAML
+     - python-configobj
+     - python-netifaces
 

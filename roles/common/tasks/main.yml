@@ -1,4 +1,5 @@
 ---
 - include: base_setup.yml
 - include: basic_pkg.yml
+  when: not is_container is defined
 - include: setup_supervisord.yml

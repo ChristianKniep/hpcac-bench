@@ -1,3 +1,5 @@
 ---
 - include: setup_monitoring.yml
+  when: not is_container is defined
 - include: setup_syslog.yml
+  when: not is_container is defined

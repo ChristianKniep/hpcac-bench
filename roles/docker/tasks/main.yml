@@ -1,4 +1,6 @@
 ---
 - include: docker.yml
+  when: not is_container is defined
 - include: start_container.yml
+  when: not is_container is defined
 #- include: setup_docker_spotter.yml

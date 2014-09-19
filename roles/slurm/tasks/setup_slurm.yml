@@ -1,5 +1,6 @@
 ---
 - name: ensure slurm rpms and dependencies are present
+  when: not is_container is defined
   yum: pkg={{ item }} state=present
   tags: 
   - slurm
@@ -25,15 +26,21 @@
 
 - name: enable munged service
   tags: slurm
-  service: name=munged state=started enabled=yes
+  supervisorctl: name=munged state=started
+
+- name: enable slurmctld service startup
+  when: is_master is defined 
+  tags: slurm
+  supervisorctl: name=slurmctld state=started
 
 - name: enable slurmd service startup
   tags: slurm
   supervisorctl: name=slurmd state=started
 
+
 - name: configure slurm (master)
   action: template src=usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
-  when: is_master is defined 
+  when: not is_container is defined and is_master is defined 
   tags: 
   - slurm
   - cfg
@@ -41,7 +48,23 @@
 
 - name: configure slurm (client)
   action: template src=usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
-  when: is_client is defined 
+  when: not is_container is defined and is_master is defined 
+  tags:
+  - slurm
+  - cfg
+  notify: restart slurmd
+
+- name: configure slurm (master)
+  action: template src=usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
+  when: is_container is defined and is_master is defined 
+  tags: 
+  - slurm
+  - cfg
+  notify: restart slurmctld
+
+- name: configure slurm (client)
+  action: template src=usr/local/etc/slurm_docker.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
+  when: is_container is defined and is_master is defined 
   tags:
   - slurm
   - cfg
