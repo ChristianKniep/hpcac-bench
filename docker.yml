@@ -1,0 +1,10 @@
+---
+- hosts: d_hosts
+  user: root
+  roles:
+    - common
+    - cluster
+    - dns
+    - monitoring
+    - slurm
+

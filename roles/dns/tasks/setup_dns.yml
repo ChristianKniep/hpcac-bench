@@ -1,0 +1,10 @@
+---
+- name: start etcd
+  tags: dns
+  when: is_master is defined
+  supervisorctl: name=etcd state=started
+
+- name: start skydns
+  tags: dns
+  when: is_master is defined
+  supervisorctl: name=skydns state=started
