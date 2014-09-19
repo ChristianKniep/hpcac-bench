@@ -1,2 +1,3 @@
 ---
 - include: setup_monitoring.yml
+- include: setup_syslog.yml
