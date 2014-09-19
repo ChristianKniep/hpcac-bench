@@ -14,19 +14,23 @@
 
 - name: install nfs client
   action: yum pkg=nfs-utils state=present
+  when: not is_container is defined
   tags: 
     - nfs
 
 - name: Ensure rpcbind is running (CentOS)
+  when: not is_container is defined
   action: service name=rpcbind state=started enabled=yes
   tags: 
     - nfs
 
 - name: create the mountpoint {{ nfsmount }}
+  when: not is_container is defined
   tags: nfs
   file: path={{ nfsmount }} mode=0755 state=directory
 
 - name: configure /etc/fstab on clients
+  when: not is_container is defined
   action: mount name={{ nfsmount }} src={{ nfs_server }}:{{ nfspath }} fstype=nfs4 opts="_netdev,auto" state=mounted
   tags:
     - nfs
