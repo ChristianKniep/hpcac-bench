@@ -1,7 +1,7 @@
 ---
 - name: Install ntp on master
   tags: ntp
-  yum: pkg={{ item }} state=latest
+  yum: pkg={{ item }} state=present
   when: is_master is defined and not ntp_server is defined
   with_items:
      - ntp
@@ -13,7 +13,7 @@
 
 - name: Install ntpdate on clients
   tags: ntp
-  yum: pkg={{ item }} state=latest
+  yum: pkg={{ item }} state=present
   when: is_client is defined or ntp_server is defined
   with_items:
      - ntpdate

@@ -1,6 +1,6 @@
 ---
-- name: ensure slurm rpms and dependencies are installed
-  yum: pkg={{ item }} state=latest
+- name: ensure slurm rpms and dependencies are present
+  yum: pkg={{ item }} state=present
   tags: 
   - slurm
   - rpm

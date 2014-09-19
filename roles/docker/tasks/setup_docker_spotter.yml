@@ -1,6 +1,6 @@
 ---
 - name: install docker-spotter
-  yum: pkg={{ item }} state=latest
+  yum: pkg={{ item }} state=present
   tags: 
   - docker
   - spotter

@@ -1,6 +1,6 @@
 ---
-- name: ensure docker-io is at the latest version
-  yum: pkg=docker state=latest
+- name: ensure docker-io is installed (no update)
+  yum: pkg=docker state=present
   when: ansible_distribution == "CentOS"
   tags:
      - docker
@@ -28,7 +28,7 @@
 #     - docker
 #
 #- name: add python-docker-py
-#  yum: pkg={{ item }} state=latest
+#  yum: pkg={{ item }} state=present
 #  with_items:
 #     - python-docker-py
 #  tags:

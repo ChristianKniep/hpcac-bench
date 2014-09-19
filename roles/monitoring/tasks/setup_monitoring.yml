@@ -2,7 +2,7 @@
 - name: ensure monitoring rpms to be installed
   tags:
     - mon
-  yum: pkg={{ item }} state=latest
+  yum: pkg={{ item }} state=present
   with_items:
      - python-diamond
      - python-pysensors
