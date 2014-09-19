@@ -18,7 +18,11 @@ case $1 in
         docker run -d -h registry --name registry -e STORAGE_PATH=/registry \
             -p 5000:5000 -v /var/lib/docker-registry:/registry registry
     ;;
+    centos7_thin_compute)
+        docker run -d --privileged ${DEV_MOUNTS} --net=host --name centos7_thin_compute -v /chome:/chome qnib/centos7_thin_compute
+    ;;
     *)
         echo "No known container given"
     ;;
 esac
+exit $?

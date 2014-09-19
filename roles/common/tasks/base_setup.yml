@@ -1,7 +1,7 @@
 ---
 - name: add repositories
   tags: base
-  copy: src={{ dir_pre | default }}/etc/yum.repos.d/{{ item }}.repo dest=/etc/yum.repos.d/{{ item }}.repo owner=root group=root mode=0644
+  copy: src=./{{ dir_pre | default }}/etc/yum.repos.d/{{ item }}.repo dest=/etc/yum.repos.d/{{ item }}.repo owner=root group=root mode=0644
   with_items:
   - epel
   - qnib

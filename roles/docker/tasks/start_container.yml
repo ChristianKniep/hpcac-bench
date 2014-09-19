@@ -10,17 +10,21 @@
   tags:
     - docker
     - container
-  script: /usr/local/bin/start_container.sh registry
   when: run_registry is defined and in docker_ps.stdout.find(' registry:') == -1
+  shell: /usr/local/bin/start_container.sh registry
 
 - name: start monster container
   tags:
     - docker
     - container
-  command: /usr/local/bin/start_container.sh monster
+  shell: /usr/local/bin/start_container.sh monster
   when: run_monster is defined and in docker_ps.stdout.find(' qnib/monster:') == -1
-#  docker: 
-#    image=registry env="STORAGE_PATH=/registry" 
-#    volumes="/var/lib/docker-registry:/registry" 
-#    name=registry state=running 
-#    docker_url=tcp://localhost:6000
+
+- name: start centos7 compute container
+  tags:
+    - docker
+    - container
+    - compute
+  shell: /usr/local/bin/start_container.sh centos7_thin_compute
+  when: docker_ps.stdout.find(' qnib/centos7_thin_compute:') == -1
+

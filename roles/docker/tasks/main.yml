@@ -1,4 +1,4 @@
 ---
 - include: docker.yml
-- include: start_reg.yml
-- include: setup_docker_spotter.yml
+- include: start_container.yml
+#- include: setup_docker_spotter.yml
