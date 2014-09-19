@@ -1,0 +1,15 @@
+---
+- include: create_shares.yml
+  when: is_nfs_server is defined
+- include: nfs-server.yml
+  when: is_nfs_server is defined
+- include: nfs-clients.yml 
+  vars:
+   nfsmount: /scratch
+   nfspath: /opt/nfs/scratch 
+- include: nfs-clients.yml 
+  vars:
+   nfsmount: /chome
+   nfspath: /opt/nfs/chome 
+- include: users.yml
+- include: setup_hpcg.yml
