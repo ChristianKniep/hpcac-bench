@@ -2,7 +2,6 @@
 - name: ensure supervisor rpms and dependencies are present
   yum: pkg={{ item }} state=present
   tags: super
-  when: not is_container is defined
   with_items:
      - python-supervisor
 

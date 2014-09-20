@@ -63,6 +63,7 @@
   tags:
     - env
     - ib
+  when: not is_container is defined
   modprobe: name={{ item }} state=present
   with_items:
     - mlx4_ib

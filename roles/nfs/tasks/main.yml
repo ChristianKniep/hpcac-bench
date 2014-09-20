@@ -11,5 +11,3 @@
   vars:
    nfsmount: /chome
    nfspath: /opt/nfs/chome 
-- include: users.yml
-- include: setup_hpcg.yml
