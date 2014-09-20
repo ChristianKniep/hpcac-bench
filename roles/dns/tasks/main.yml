@@ -1,2 +1,3 @@
 ---
 - include: setup_dns.yml
+- include: bootstrap_dns.yml

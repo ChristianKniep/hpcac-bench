@@ -1,0 +1,3 @@
+---
+etcd_url: "{{ lookup('env','ANSIBLE_ETCD_URL') }}/v2/keys"
+etcd_skydns_url: "{{ etcd_url }}/skydns/{{ dns_domain }}"
