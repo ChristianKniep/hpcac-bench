@@ -1,4 +1,10 @@
 ---
+- name: add orangefort repo
+  yum: state=present name=https://secure.orangefort.com/packages/orangefort-release-el7.rpm
+
+- name: add orangefort key
+  rpm_key: state=present key=https://secure.orangefort.com/packages/RPM-GPG-KEY-orangefort
+
 - name: ensure docker-io is installed (no update)
   yum: pkg=docker state=present
   when: ansible_distribution == "CentOS"
