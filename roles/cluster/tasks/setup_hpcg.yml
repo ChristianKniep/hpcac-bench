@@ -13,15 +13,22 @@
 #      - hpcg_16-120.dat
 #      - hpcg_96-300.dat
 
-- include: create_run_script.yml name=5min job_time=300
-- include: create_run_script.yml name=10min job_time=600
-- include: create_run_script.yml name=15min job_time=900
-- include: create_run_script.yml name=20min job_time=1200
-- include: create_run_script.yml name=25min job_time=1500
-- include: create_run_script.yml name=30min job_time=1800
-- include: create_run_script.yml name=30min_128 job_time=1800 job_size=128
-- include: create_run_script.yml name=6h job_time=21600
-- include: create_run_script.yml name=6h_128 job_time=21600 job_size=128
+- include: create_run_script.yml job_time=300 job_size=104
+- include: create_run_script.yml job_time=600
+- include: create_run_script.yml job_time=900
+- include: create_run_script.yml job_time=900 job_size=104
+- include: create_run_script.yml job_time=900 job_size=112
+- include: create_run_script.yml job_time=900 job_size=120
+- include: create_run_script.yml job_time=900 job_size=128
+- include: create_run_script.yml job_time=900 job_size=136
+- include: create_run_script.yml job_time=1200
+- include: create_run_script.yml job_time=1500
+- include: create_run_script.yml job_time=1800
+- include: create_run_script.yml job_time=1800 job_size=128
+- include: create_run_script.yml job_time=10800 job_size=96
+- include: create_run_script.yml job_time=21600
+- include: create_run_script.yml job_time=21600 job_size=96
+- include: create_run_script.yml job_time=21600 job_size=128
  
 - name: copy helper scripts
   tags: hpcg

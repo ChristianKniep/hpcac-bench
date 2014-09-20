@@ -1,5 +1,5 @@
 ---
-- name: create run_hpcg script {{ name }} 
+- name: create run_hpcg script {{ job_size }} _{{ job_time }}
   tags: hpcg
-  action: template src=run_xhpcg.sh.j2 dest=/opt/hpcg/job_scripts/run_xhpcg_{{ name }}.sh owner=root group=root mode=0755
+  action: template src=run_xhpcg.sh.j2 dest=/opt/hpcg/job_scripts/run_xhpcg_{{ job_size }}_{{ job_time }}.sh owner=root group=root mode=0755
 
