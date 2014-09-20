@@ -5,5 +5,3 @@
   when: not is_container is defined
 - include: setup_supervisord.yml
   when: not is_container is defined
-- include: bootstrap_container.yml
-  when: is_container is defined
