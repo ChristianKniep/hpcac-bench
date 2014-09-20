@@ -18,6 +18,11 @@
     - restart docker
   tags:
      docker
+
+- name: reload system deamons
+  tags: docker
+  command: systemctl daemon-reload
+
 - name: ensure docker is running
   service: name=docker state=started
   tags:
