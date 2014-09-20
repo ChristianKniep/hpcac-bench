@@ -19,9 +19,9 @@
 - name: "Build cluster mfile"
   tags: slurm
   lineinfile: dest=/home/cluser/bare-metal/mfile_all regexp='.*{{ item }}$' line="{{item}}" state=present
-  with_items: groups['all']
+  with_items: groups['p_hosts']
 
 - name: "Build clients mfile"
   tags: slurm
   lineinfile: dest=/home/cluser/bare-metal/mfile_clients regexp='.*{{ item }}$' line="{{item}}" state=present
-  with_items: groups['clients']
+  with_items: groups['p_clients']
