@@ -3,6 +3,7 @@
   user: root
   roles:
     - dns
+    - slurm
     
 - hosts: d_clients
   user: root
