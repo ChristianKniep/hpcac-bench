@@ -1,4 +1,17 @@
 ---
+- name: kick out file lookup for hosts (nsswitch.conf)
+  tags:
+    - dns
+    - nsswitch
+  action: 'lineinfile
+    dest=/etc/nsswitch.conf
+    line=''hosts:      dns''
+    regexp="^hosts\:"
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True'
+
 - name: send hostname to etcd
   tags: dns
   action: 'shell curl -sL {{ etcd_skydns_url }}/{{ inventory_hostname_short }} -XPUT -d value=''{"Host": "{{ ansible_all_ipv4_addresses[0] }}"}'''

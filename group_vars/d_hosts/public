@@ -1,2 +1,3 @@
 dns_domain: docker
 is_container: true
+slurm_conf_template: slurm_docker.conf.j2

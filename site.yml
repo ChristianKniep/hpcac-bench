@@ -1,5 +1,5 @@
 ---
-- hosts: all
+- hosts: p_hosts
   user: root
   roles:
     - common

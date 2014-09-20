@@ -21,7 +21,7 @@
 - name: Update time from master once
   tags: ntp
   when: not is_master is defined and not ntp_server is defined and not is_container is defined
-  command: ntpdate {{ groups['master'][0] }}
+  command: ntpdate {{ groups['p_master'][0] }}
 
 - name: Update time from ntp_server
   tags: ntp

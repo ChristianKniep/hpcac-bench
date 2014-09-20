@@ -6,4 +6,13 @@
   - spotter
   with_items:
   - openvswitch 
+  - docker-spotter
+
+- name: ensure openvswitch and docker-spotter are running
+  service: name={{ item }} state=started
+  tags:
+     - docker
+  with_items:
+  - openvswitch 
+  - docker-spotter
 

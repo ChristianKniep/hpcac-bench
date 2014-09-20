@@ -1,9 +1,11 @@
 ---
-- name: add orangefort repo
-  yum: state=present name=https://secure.orangefort.com/packages/orangefort-release-el7.rpm
-
 - name: add orangefort key
-  rpm_key: state=present key=https://secure.orangefort.com/packages/RPM-GPG-KEY-orangefort
+  tags: docker
+  rpm_key: state=present key=https://secure.orangefort.com/packages/RPM-GPG-KEY-orangefort validate_certs=no
+
+- name: add orangefort repo
+  tags: docker
+  yum: state=present name=https://secure.orangefort.com/packages/orangefort-release-el7.rpm 
 
 - name: ensure docker-io is installed (no update)
   yum: pkg=docker state=present
@@ -20,6 +22,23 @@
   service: name=docker state=started
   tags:
      - docker
+
+- name: Update bashrc for DOCKER_HOST
+  tags:
+    - docker
+    - env
+  lineinfile:
+    dest=/etc/bashrc
+    line="export DOCKER_HOST=tcp://localhost:6000"
+    regexp=".*DOCKER_HOST="
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+- name: Copydocker startscript (since docker-py failed for me)
+  tags: docker
+  copy: src=usr/local/bin/start_container.sh dest=/usr/local/bin/start_container.sh owner=root group=root mode=0755
 
 #- name: add dummy docker rpm
 #  copy: src=yum-cache/docker-1.0-1.x86_64.rpm dest=/tmp/docker-1.0-1.x86_64.rpm owner=root group=root mode=0644
@@ -39,21 +58,4 @@
 #     - python-docker-py
 #  tags:
 #     - docker
-
-- name: Update bashrc for DOCKER_HOST
-  tags:
-    - docker
-    - env
-  lineinfile:
-    dest=/etc/bashrc
-    line="export DOCKER_HOST=tcp://localhost:6000"
-    regexp=".*DOCKER_HOST="
-    owner=root
-    state=present
-    insertafter=EOF
-    create=True
-
-- name: Copydocker startscript (since docker-py failed for me)
-  tags: docker
-  copy: src=usr/local/bin/start_container.sh dest=/usr/local/bin/start_container.sh owner=root group=root mode=0755
 
