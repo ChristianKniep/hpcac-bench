@@ -19,3 +19,6 @@ venus001
 
 [docker_server]
 venus008
+
+[all:vars]
+nfs_server=venus001

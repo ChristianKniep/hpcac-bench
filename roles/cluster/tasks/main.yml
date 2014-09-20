@@ -1,15 +1,6 @@
 ---
 - include: cluster_env.yml   
 - include: setup_ntp.yml
-- include: create_shares.yml
-- include: nfs-server.yml
-- include: nfs-clients.yml 
-  vars:
-   nfsmount: /scratch
-   nfspath: /opt/nfs/scratch 
-- include: nfs-clients.yml 
-  vars:
-   nfsmount: /chome
-   nfspath: /opt/nfs/chome 
+  when: not is_container is defined
 - include: users.yml
 - include: setup_hpcg.yml

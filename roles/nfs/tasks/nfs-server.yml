@@ -9,13 +9,11 @@
   tags: nfs
   yum: pkg={{ item }}
        state=present 
-  when: is_nfs_server is defined
   with_items:
     - nfs-utils
 
 - name: add an export
   tags: nfs
-  when: is_nfs_server is defined
   lineinfile: dest=/etc/exports
               regexp=''
               insertafter=EOF
@@ -23,7 +21,6 @@
 
 - name: start nfs-server
   tags: nfs
-  when: is_nfs_server is defined
   service: name=nfs-server
            state=running
            enabled=yes

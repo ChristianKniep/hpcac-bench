@@ -1,0 +1,8 @@
+---
+- name: start etcd+skydns
+  tags: dns
+  when: is_master is defined
+  supervisorctl: name={{ item }} state=started
+  with_items:
+    - etcd
+    - skydns

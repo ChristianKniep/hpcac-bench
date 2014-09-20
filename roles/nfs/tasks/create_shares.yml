@@ -7,21 +7,12 @@
 ---
 - name: create a chome directory to share
   tags: nfs
-  when: is_nfs_server is defined
   file: path=/opt/nfs/chome/
         mode=0755
         state=directory
 
 - name: create a scratch directory to share
   tags: nfs
-  when: is_nfs_server is defined
   file: path=/opt/nfs/scratch/
         mode=0777
         state=directory
-
-#- name: Create symlink 
-#  tags: nfs
-#  when: is_nfs_server is defined
-#  file: src=/opt/nfs/{{ item }} dest=/{{ item }} owner=root group=root state=link
-#  with_items:
-#     - scratch

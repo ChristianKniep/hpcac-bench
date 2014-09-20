@@ -5,6 +5,5 @@ time_zone: Europe/Berlin
 mpi_version: openmpi-x86_64
 
 hpcg_dir: /scratch/hpcg-2.4/
-nfs_server: venus001
 job_size: 72
 job_time: 300

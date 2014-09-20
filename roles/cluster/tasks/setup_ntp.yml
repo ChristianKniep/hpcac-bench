@@ -20,14 +20,15 @@
 
 - name: Update time from master once
   tags: ntp
-  when: not is_master is defined and not ntp_server is defined
+  when: not is_master is defined and not ntp_server is defined and not is_container is defined
   command: ntpdate {{ groups['master'][0] }}
 
 - name: Update time from ntp_server
   tags: ntp
-  when: ntp_server is defined
+  when: ntp_server is defined and not is_container is defined
   command: ntpdate {{ ntp_server }}
 
 - name: Set timezone
   tags: ntp
+  when: not is_container is defined
   command: timedatectl set-timezone {{ time_zone }}
