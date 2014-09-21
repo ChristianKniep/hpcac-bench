@@ -1,0 +1,13 @@
+#!/bin/bash
+#SBATCH --ntasks-per-node={{ ansible_processor_vcpus }}
+#SBATCH --workdir={{ home_dir }}/cluser/{{ run_host }}
+#SBATCH --job-name=hello_world
+
+# ENV
+. ${HOME}/mpi_selector
+# \ENV
+
+echo "## $(date +'%F %H:%M:%S') Start mpirun with 'hello_world'"
+mpirun --mca btl "self,openib"  {{ home_dir }}/cluser/bin/${MPI_VER}/hello_world
+echo "## $(date +'%F %H:%M:%S') Job ends"
+

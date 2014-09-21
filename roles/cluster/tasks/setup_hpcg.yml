@@ -6,30 +6,11 @@
 #  - input_files
   - job_scripts
 
-#- name: copy input files
-#  tags: hpcg
-#  copy: src=opt/hpcg/input_files/{{ item }} dest=/opt/hpcg/input_files/{{ item }} owner=root group=root mode=0644
-#  with_items:
-#      - hpcg_16-120.dat
-#      - hpcg_96-300.dat
+- name: create job scripts
+  tags: hpcg
+  include: create_job_scripts.yml
+  when: is_nfs_server is defined
 
-- include: create_run_script.yml job_time=300 job_size=104
-- include: create_run_script.yml job_time=600
-- include: create_run_script.yml job_time=900
-- include: create_run_script.yml job_time=900 job_size=104
-- include: create_run_script.yml job_time=900 job_size=112
-- include: create_run_script.yml job_time=900 job_size=120
-- include: create_run_script.yml job_time=900 job_size=128
-- include: create_run_script.yml job_time=900 job_size=136
-- include: create_run_script.yml job_time=1200
-- include: create_run_script.yml job_time=1500
-- include: create_run_script.yml job_time=1800
-- include: create_run_script.yml job_time=1800 job_size=128
-- include: create_run_script.yml job_time=10800 job_size=96
-- include: create_run_script.yml job_time=21600
-- include: create_run_script.yml job_time=21600 job_size=96
-- include: create_run_script.yml job_time=21600 job_size=128
- 
 - name: copy helper scripts
   tags: hpcg
   copy: src=usr/local/bin/{{ item }} dest=/usr/local/bin/{{ item }} owner=root group=root mode=0755

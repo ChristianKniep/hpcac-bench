@@ -1,0 +1,26 @@
+---
+- include: create_run_script.yml job_time=150 job_size=32 run_host=bare
+- include: create_run_script.yml job_time=300 job_size=104 run_host=bare
+- include: create_run_script.yml job_time=900 job_size=88 run_host=bare
+- include: create_run_script.yml job_time=900 job_size=96 run_host=bare
+- include: create_run_script.yml job_time=900 job_size=104 run_host=bare
+- include: create_run_script.yml job_time=900 job_size=112 run_host=bare
+- include: create_run_script.yml job_time=900 job_size=120 run_host=bare
+- include: create_run_script.yml job_time=900 job_size=128 run_host=bare
+- include: create_run_script.yml job_time=900 job_size=136 run_host=bare
+- include: create_run_script.yml job_time=900 job_size=144 run_host=bare
+#docker
+- include: create_run_script.yml job_time=150 job_size=32 run_host=docker
+- include: create_run_script.yml job_time=300 job_size=104 run_host=docker
+- include: create_run_script.yml job_time=900 job_size=88 run_host=docker
+- include: create_run_script.yml job_time=900 job_size=96 run_host=docker
+- include: create_run_script.yml job_time=900 job_size=104 run_host=docker
+- include: create_run_script.yml job_time=900 job_size=112 run_host=docker
+- include: create_run_script.yml job_time=900 job_size=120 run_host=docker
+- include: create_run_script.yml job_time=900 job_size=128 run_host=docker
+- include: create_run_script.yml job_time=900 job_size=136 run_host=docker
+- include: create_run_script.yml job_time=900 job_size=144 run_host=docker
+
+# hello world
+- include: create_run_hello_world_script.yml run_host=docker
+- include: create_run_hello_world_script.yml run_host=bare
