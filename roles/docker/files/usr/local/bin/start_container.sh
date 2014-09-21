@@ -24,6 +24,9 @@ case $1 in
     slurm0)
         docker run -d --privileged ${DEV_MOUNTS} -h slurm0.docker --net=none --name slurm0 -v /chome:/chome --dns=127.0.0.1 --dns-search="docker" qnib/centos7_thin_compute
     ;;
+    proxy)
+        docker run -d --privileged ${DEV_MOUNTS} -h proxy.docker --name proxy --dns=$2 --dns-search="docker" qnib/centos7_thin_compute
+    ;;
     *)
         echo "No known container given"
     ;;

@@ -20,11 +20,11 @@
   shell: /usr/local/bin/start_container.sh monster
   when: run_monster is defined and in docker_ps.stdout.find(' qnib/monster:') == -1
 
-- name: start centos7 compute container
-  tags:
-    - docker
-    - container
-    - compute
-  shell: /usr/local/bin/start_container.sh centos7_thin_compute
-  when: docker_ps.stdout.find(' qnib/centos7_thin_compute:') == -1
+#- name: start centos7 compute container
+#  tags:
+#    - docker
+#    - container
+#    - compute
+#  shell: /usr/local/bin/start_container.sh compute0 
+#  when: docker_ps.stdout.find(' qnib/centos7_thin_compute:') == -1
 

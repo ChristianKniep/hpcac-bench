@@ -1,11 +1,11 @@
 ---
-- name: add orangefort key
-  tags: docker
-  rpm_key: state=present key=https://secure.orangefort.com/packages/RPM-GPG-KEY-orangefort validate_certs=no
+#- name: add orangefort key
+#  tags: docker
+#  rpm_key: state=present key=https://secure.orangefort.com/packages/RPM-GPG-KEY-orangefort validate_certs=no
 
-- name: add orangefort repo
-  tags: docker
-  yum: state=present name=https://secure.orangefort.com/packages/orangefort-release-el7.rpm 
+#- name: add orangefort repo
+#  tags: docker
+#  yum: state=present name=https://secure.orangefort.com/packages/orangefort-release-el7.rpm 
 
 - name: ensure docker-io is installed (no update)
   yum: pkg=docker state=present

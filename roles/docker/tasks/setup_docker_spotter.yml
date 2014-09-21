@@ -7,6 +7,21 @@
   with_items:
   - openvswitch 
   - docker-spotter
+  - pipework
+
+- name: Update bashrc for DOCKER_HOST
+  tags:
+    - docker
+    - env
+  lineinfile:
+    dest=/etc/qnib-plumb-cache.cfg
+    line="plumb_network = {{ plumb_network }}"
+    regexp="plumb_network ="
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
 
 - name: ensure openvswitch and docker-spotter are running
   service: name={{ item }} state=started
