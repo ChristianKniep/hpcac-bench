@@ -12,6 +12,7 @@ Options:
 from docopt import docopt
 import yaml
 import re
+import os
 from pprint import pprint
 
 def fetch_ele(dic, keys, res_key=None):
@@ -52,12 +53,16 @@ def main():
         key_dic.reverse()
         (key, val) = fetch_ele(obj, key_dic)
         res[short_key] = val
+    res['node_list'] = os.environ.get('SLURM_NODELIST', 'unkown')
+    res['mpi_ver'] = os.environ.get('MPI_VER', 'unkown')
     msg = []
-    msg.append("TIME:%(time.total)s" % res)
-    msg.append("GFLOP/s:%(gflops)s" % res)
-    msg.append("#THREADS/PROC: %(mach.threads_per_proc)s" % res)
-    msg.append("#PROC:%(mach.num_proc)s" % res)
-    msg.append("Problem:%(problem.dim.x)sx%(problem.dim.y)sx%(problem.dim.z)s" % res)
+    msg.append("NODES:%(node_list)-15s" % res)
+    msg.append("MPI:%(mpi_ver)-10s" % res)
+    msg.append("TIME:%(time.total)-8s" % res)
+    msg.append("GFLOP/s:%(gflops)-10s" % res)
+    msg.append("#THREADS/PROC:%(mach.threads_per_proc)-3s" % res)
+    msg.append("#PROC:%(mach.num_proc)-3s" % res)
+    msg.append("Problem:%(problem.dim.x)sx%(problem.dim.y)sx%(problem.dim.z)-12s" % res)
     msg.append("Local:%(local.dim.x)sx%(local.dim.y)sx%(local.dim.z)s" % res)
     print " | ".join(msg)
     
