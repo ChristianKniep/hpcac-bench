@@ -2,14 +2,17 @@
 # -*- coding: utf-8 -*-
 """
 Usage:
-    eval_hpcg.py [options] <file>
+    eval_hpcg.py [options] <path>
 
 Options:
-  -h --help     Show this screen.
-  --version     Show version.
+  -j, --job-cfg=<path>   job.cfg with key=val definitions
+  --wall-clock=<sec>     Overall runtime of the mpirun
+  -h --help              Show this screen.
+  --version              Show version.
 """
 
 from docopt import docopt
+import ConfigParser
 import yaml
 import re
 import os
@@ -27,12 +30,26 @@ def fetch_ele(dic, keys, res_key=None):
     dic = dic[key]
     return fetch_ele(dic, keys, res_key)
 
+class Config(object):
+    def __init__(self, opt):
+        self._opt = opt
+    
+        
+
 def main():
     """ main function """
     # Parameter
-    options =  docopt(__doc__, version='0.1')
+    options = docopt(__doc__, version='0.1')
+    job_cfg = options.get('--job-cfg')
+    if job_cfg is not None:
+       with open(job_cfg,"r") as fd:
+           lines = fd.readlines()
+       for line in lines:
+           (key, val) = line.split("=")
+           options[key] = val
     with open(options.get("<file>"), "r") as fd:
         lines = fd.readlines()
+
     reg = "(?P<jobid>\d+//HPCG-Benchmark-\d\.\d_(?P<date>[0-9\.]+\.yaml"
     
     obj = yaml.load("\n".join([line.rstrip() for line in lines if re.match("^\s*\w+.*\:", line)]))
@@ -54,15 +71,17 @@ def main():
         (key, val) = fetch_ele(obj, key_dic)
         res[short_key] = val
     res['node_list'] = os.environ.get('SLURM_NODELIST', 'unkown')
-    res['mpi_ver'] = os.environ.get('MPI_VER', 'unkown')
+    res['mpi_ver'] = os.environ.get('MPI_VER', options.get("MPI_VER", 'unkown'))
+    res['wall_clock'] = options.get('--wall-clock', options.get("WALL_CLOCK", 'unkown'))
     msg = []
     msg.append("NODES:%(node_list)-15s" % res)
     msg.append("MPI:%(mpi_ver)-10s" % res)
+    msg.append("WALL:%(wall_clock)-5s" % res)
     msg.append("TIME:%(time.total)-8s" % res)
     msg.append("GFLOP/s:%(gflops)-10s" % res)
     msg.append("#THREADS/PROC:%(mach.threads_per_proc)-3s" % res)
     msg.append("#PROC:%(mach.num_proc)-3s" % res)
-    msg.append("Problem:%(problem.dim.x)sx%(problem.dim.y)sx%(problem.dim.z)-12s" % res)
+    msg.append("Problem:%(problem.dim.x)sx%(problem.dim.y)sx%(problem.dim.z)-7s" % res)
     msg.append("Local:%(local.dim.x)sx%(local.dim.y)sx%(local.dim.z)s" % res)
     print " | ".join(msg)
     
