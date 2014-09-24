@@ -11,30 +11,6 @@
     insertafter=EOF
     create=True
 
-- name: module unload mpi
-  tags:
-    - env
-  lineinfile:
-    dest=/etc/bashrc
-    line="module unload mpi"
-    regexp=".*module unload mpi"
-    owner=root
-    state=present
-    insertafter=EOF
-    create=True
-
-- name: module load mpi/openmpi
-  tags:
-    - env
-  lineinfile:
-    dest=/etc/bashrc
-    line="module load mpi/openmpi-x86_64"
-    regexp=".*module load mpi/openmpi-x86_64"
-    owner=root
-    state=present
-    insertafter=EOF
-    create=True
-
 - name: OMP_NUM_THREADS
   tags:
     - env
