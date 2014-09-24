@@ -2,11 +2,9 @@
 # -*- coding: utf-8 -*-
 """
 Usage:
-    eval_hpcg.py [options] <path>
+    eval_hpcg.py [options] <job_path>
 
 Options:
-  -j, --job-cfg=<path>   job.cfg with key=val definitions
-  --wall-clock=<sec>     Overall runtime of the mpirun
   -h --help              Show this screen.
   --version              Show version.
 """
@@ -30,28 +28,23 @@ def fetch_ele(dic, keys, res_key=None):
     dic = dic[key]
     return fetch_ele(dic, keys, res_key)
 
-class Config(object):
-    def __init__(self, opt):
-        self._opt = opt
-    
-        
 
-def main():
-    """ main function """
-    # Parameter
-    options = docopt(__doc__, version='0.1')
-    job_cfg = options.get('--job-cfg')
-    if job_cfg is not None:
-       with open(job_cfg,"r") as fd:
-           lines = fd.readlines()
-       for line in lines:
-           (key, val) = line.split("=")
-           options[key] = val
-    with open(options.get("<file>"), "r") as fd:
+def eval_jobcfg(jpath):
+    """ evaluates key=value file
+    """
+    options = {}
+    with open(jpath,"r") as fd:
         lines = fd.readlines()
+    for line in lines:
+        (key, val) = line.split("=")
+        options[key] = val.strip()
+    return options
 
-    reg = "(?P<jobid>\d+//HPCG-Benchmark-\d\.\d_(?P<date>[0-9\.]+\.yaml"
-    
+def eval_hpcg_res(jpath):
+    """ evaluates HPCG results yaml
+    """
+    with open(jpath, "r") as fd:
+        lines = fd.readlines()
     obj = yaml.load("\n".join([line.rstrip() for line in lines if re.match("^\s*\w+.*\:", line)]))
     res_map = {
         "time.total": ['Benchmark Time Summary', 'Total'],
@@ -70,6 +63,18 @@ def main():
         key_dic.reverse()
         (key, val) = fetch_ele(obj, key_dic)
         res[short_key] = val
+    return res
+
+def main():
+    """ main function """
+    # Parameter
+    options = docopt(__doc__, version='0.1')
+    job_path = options.get('<job_path>')
+    for fpath in os.listdir(job_path):
+        if fpath == "job.cfg":
+            options.update(eval_jobcfg(os.path.join(job_path, fpath)))
+        if re.match("HPCG-Benchmark-\d\.\d_[0-9\.]+\.yaml", fpath):
+            res = eval_hpcg_res(os.path.join(job_path, fpath))
     res['node_list'] = os.environ.get('SLURM_NODELIST', 'unkown')
     res['mpi_ver'] = os.environ.get('MPI_VER', options.get("MPI_VER", 'unkown'))
     res['wall_clock'] = options.get('--wall-clock', options.get("WALL_CLOCK", 'unkown'))
