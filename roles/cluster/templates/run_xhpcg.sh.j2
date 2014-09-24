@@ -4,9 +4,7 @@
 #SBATCH --job-name={{ job_size }}_{{ job_time }}
 
 # ENV
-source /etc/bashrc
-module unload mpi
-module load mpi/{{ mpi_version }}
+. ~/mpi_selector
 # \ENV
 
 mkdir -p ${SLURM_JOBID}
@@ -18,8 +16,15 @@ Sandia National Laboratories; University of Tennessee, Knoxville
 {{ job_time }}
 EOF
 
-echo "## $(date +'%F %H:%M:%S') Start mpirun with '{{ job_size }}^3 in {{ job_time }}sec' input deck"
-mpirun --mca btl "self,openib"  {{ home_dir }}/cluser/hpcg-2.4/{{ run_host }}_OMP-SYS/bin/xhpcg
+START_TIME=$(date +%s)
+echo "## $(date +'%F %H:%M:%S') Start mpirun with '{{ job_size }}^3 in {{ job_time }}sec' using '{{ home_dir }}/cluser/mpi/${OS_VER}/{{ run_host }}/${MPI_VER}/' input deck"
+mpirun --mca btl "self,openib"  {{ home_dir }}/cluser/hpcg-2.4/{{ run_host }}_${MPI_VER}/bin/xhpcg
+EC=$?
 echo "## $(date +'%F %H:%M:%S') Job ends"
-eval_hpcg.py HPCG-Benchmark-*.yaml
+if [ ${EC} -eq 0 ];then
+    export MPI_VER=${MPI_VER}
+    END_TIME=$(date +%s)
+    WALL_CLOCK=$((${END_TIME}-${START_TIME}))
+    eval_hpcg.py --wall-clock ${WALL_CLOCK}  HPCG-Benchmark-*.yaml
+fi
 
