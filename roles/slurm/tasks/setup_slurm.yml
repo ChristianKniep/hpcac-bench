@@ -36,9 +36,10 @@
   tags: slurm
   file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
 
-- name: enable munged service
-  tags: slurm
-  supervisorctl: name=munged state=started
+- name: restart munged service
+  tags: 
+  - slurm
+  supervisorctl: name=munged state=restarted
 
 
 - name: configure slurm (master)
@@ -57,27 +58,26 @@
   - cfg
   notify: restart slurmctld
 
-- name: configure slurm (client)
-  action: template src=usr/local/etc/slurm.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
-  when: not is_container is defined and is_master is defined 
-  tags:
-  - slurm
-  - cfg
-  notify: restart slurmd
-
-
 - name: create slurm directories
   tags: slurm
   file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
 
-- name: configure slurm (client)
-  action: template src=usr/local/etc/slurm_docker.conf.j2 dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
-  when: is_container is defined 
-  tags:
+- name: configure slurmctld and slurmd (master)
+  action: template src=usr/local/etc/{{ slurm_conf_template }} dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
+  when: is_master is defined 
+  tags: 
+  - slurm
+  - cfg
+  notify: 
+  - restart slurmctld
+
+- name: configure slurmd
+  action: template src=usr/local/etc/{{ slurm_conf_template }} dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
+  when: not is_master is defined 
+  tags: 
   - slurm
   - cfg
   notify: restart slurmd
-
 
 - name: LD_LIBRARY_PATH to find libmunge
   tags:
