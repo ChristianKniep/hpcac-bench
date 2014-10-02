@@ -186,6 +186,10 @@ NodeName={{host}}
 {% for host in groups['centos7'] %}
 NodeName={{host}} 
 {% endfor %}
+{% for host in groups['ubuntu12'] %}
+NodeName={{host}} 
+{% endfor %}
 PartitionName=cos6 Nodes={% for host in groups['centos6'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
 PartitionName=cos7 Nodes={% for host in groups['centos7'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
+PartitionName=u12 Nodes={% for host in groups['ubuntu12'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
 
