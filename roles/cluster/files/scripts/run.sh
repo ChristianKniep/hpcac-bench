@@ -6,28 +6,31 @@
 
 . job.cfg
 
-if [[ ${MPI_VER} =~ omp ]];then
+if [ $(cat /etc/issue|grep -c 'Ubuntu 12.04') -eq 1 ];then
+    echo "On Ubuntu we do not choose..."
+elif [[ ${MPI_VER} =~ omp ]];then
     if [ ${MPI_VER} == omp-sys ];then
         MPI_PATH=/usr/lib64/openmpi
     else
         MPI_NR=$(echo ${MPI_VER} |egrep -o "[0-9\.]+")
         MPI_PATH=/usr/local/openmpi/${MPI_NR}/
     fi
+    # ENV
+    echo "MPI_PATH=${MPI_PATH}" >> job.cfg
+    BASE_PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin
+    export PATH=${MPI_PATH}/bin:${BASE_PATH}
+    export LD_LIBRARY_PATH=${MPI_PATH}/lib:/usr/local/lib
+    # \ENV
 else 
     echo "unrecogniced mpi version '${MPI_VER}'"
     exit 1
 fi
-echo "MPI_PATH=${MPI_PATH}" >> job.cfg
-# ENV
-BASE_PATH=/usr/local/bin:/bin:/usr/bin:/usr/local/sbin:/usr/sbin:/sbin
-export PATH=${MPI_PATH}/bin:${BASE_PATH}
-export LD_LIBRARY_PATH=${MPI_PATH}/lib:/usr/local/lib
-# \ENV
+echo "SLURM_NODELIST=${SLURM_NODELIST}" >> job.cfg
 
 
 START_TIME=$(date +%s)
 echo "## $(date +'%F %H:%M:%S') Start mpirun with '${PROB_SIZE}^3 in ${JOB_TIME}sec'"
-mpirun --mca btl "self,openib"  /chome/cluser/hpcg-2.4/cos${OS_VER}_${MPI_VER}/bin/xhpcg
+mpirun --mca btl "self,openib"  /chome/cluser/hpcg-2.4/${OS_BASE}${OS_VER}_${MPI_VER}/bin/xhpcg
 EC=$?
 echo "## $(date +'%F %H:%M:%S') Job ends"
 if [ ${EC} -eq 0 ];then
