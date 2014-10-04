@@ -5,6 +5,12 @@ DEV_MOUNTS="-v /dev/urandom:/dev/urandom -v /dev/random:/dev/random"
 DEV_MOUNTS="${DEV_MOUNTS} -v /dev/null:/dev/null -v /dev/zero:/dev/zero"
 DNS_IP=192.168.13.181
 
+COMPUTE_MOUNT="-v /chome:/chome -v /usr/local/etc/:/usr/local/etc/:ro"
+
+NET="--net=none --dns=192.168.12.181 --dns-search=local"
+if [[ $1 =~ .*_1 ]];then
+    NET="--dns=172.17.42.1 --dns-search=local"
+fi
 case $1 in
     monster)
         # if you want to store data outside of the CoW-FS
@@ -20,16 +26,13 @@ case $1 in
             -p 5000:5000 -v /var/lib/docker-registry:/registry registry
     ;;
     cos7*)
-        docker run -d --privileged ${DEV_MOUNTS} -h ${1}.docker --net=none --name ${1} -v /chome:/chome --dns=${DNS_IP} --dns-search="docker" venus001:5000/qnib/centos7_thin_compute
+        docker run -d --privileged ${DEV_MOUNTS} -h ${1}.docker ${NET} --name ${1} ${COMPUTE_MOUNT} venus001:5000/qnib/centos7_thin_compute
     ;;
     cos6*)
-        docker run -d --privileged ${DEV_MOUNTS} -h ${1}.docker --net=none --name ${1} -v /chome:/chome --dns=${DNS_IP} --dns-search="docker" venus001:5000/qnib/centos6_thin_compute
+        docker run -d --privileged ${DEV_MOUNTS} -h ${1}.docker ${NET} --name ${1} ${COMPUTE_MOUNT} venus001:5000/qnib/centos6_thin_compute
     ;;
-    slurm0)
-        docker run -d --privileged ${DEV_MOUNTS} -h slurm0.docker --net=none --name slurm0 -v /chome:/chome --dns=127.0.0.1 --dns-search="docker" qnib/centos7_thin_compute
-    ;;
-    proxy)
-        docker run -d --privileged ${DEV_MOUNTS} -h proxy.docker --name proxy --dns=$2 --dns-search="docker" qnib/centos7_thin_compute
+    u12*)
+        docker run -d --privileged ${DEV_MOUNTS} -h ${1}.docker ${NET} --name ${1} ${COMPUTE_MOUNT} venus001:5000/qnib/ubuntu12_compute
     ;;
     *)
         echo "No known container given"
