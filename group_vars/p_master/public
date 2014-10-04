@@ -1,2 +1,3 @@
 is_master: true
 is_nfs_server: true
+slurm_conf_template: slurm.conf_master.j2
