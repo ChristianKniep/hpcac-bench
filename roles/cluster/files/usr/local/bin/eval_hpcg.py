@@ -75,7 +75,7 @@ def main():
             options.update(eval_jobcfg(os.path.join(job_path, fpath)))
         if re.match("HPCG-Benchmark-\d\.\d_[0-9\.]+\.yaml", fpath):
             res = eval_hpcg_res(os.path.join(job_path, fpath))
-    res['node_list'] = os.environ.get('SLURM_NODELIST', 'unkown')
+    res['node_list'] = options.get('SLURM_NODELIST', 'unkown')
     res['mpi_ver'] = os.environ.get('MPI_VER', options.get("MPI_VER", 'unkown'))
     res['wall_clock'] = options.get('--wall-clock', options.get("WALL_CLOCK", 'unkown'))
     msg = []
