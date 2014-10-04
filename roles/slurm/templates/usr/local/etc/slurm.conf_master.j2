@@ -10,7 +10,7 @@
 # 
 DebugFlags=NO_CONF_HASH
 ControlMachine={{ groups['p_master'][0] }}
-#ControlAddr=
+ControlAddr={{ hostvars[groups['p_master'][0]]['ansible_docker0']['ipv4']['address'] }}
 #BackupController=slurm2
 #BackupAddr=192.168.160.6
 # 
@@ -182,15 +182,15 @@ SlurmdLogFile=/var/log/slurm/slurmd.log
 # 
 # Sockets=1 CoresPerSocket=1 ThreadsPerCore=1
 {% for host in groups['p_hosts'] %}
-NodeName={{host}}
+NodeName={{host}} 
 {% endfor %}
 PartitionName=venus Nodes={% for host in groups['p_hosts'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
 {% for host in groups['centos6'] %}
-NodeName={{host}}
+NodeName={{host}} 
 {% endfor %}
 PartitionName=cos6 Nodes={% for host in groups['centos6'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
 {% for host in groups['centos7'] %}
-NodeName={{host}}
+NodeName={{host}} 
 {% endfor %}
 PartitionName=cos7 Nodes={% for host in groups['centos7'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
 {% for host in groups['ubuntu12'] %}
