@@ -1,0 +1,57 @@
+[p_master]
+venus001
+
+[p_clients]
+venus002
+venus003
+venus004
+venus005
+venus006
+venus007
+venus008
+
+[p_hosts:children]
+p_master
+p_clients
+[p_hosts:vars]
+nfs_server=venus001
+[venus:children]
+p_hosts
+
+[docker_server]
+venus008
+
+[centos7]
+cos7_1 dhost=venus001
+cos7_2 dhost=venus002
+cos7_3 dhost=venus003
+cos7_4 dhost=venus004
+cos7_5 dhost=venus005
+cos7_6 dhost=venus006
+cos7_7 dhost=venus007
+cos7_8 dhost=venus008
+
+[centos6]
+cos6_1 dhost=venus001
+cos6_2 dhost=venus002
+cos6_3 dhost=venus003
+cos6_4 dhost=venus004
+cos6_5 dhost=venus005
+cos6_6 dhost=venus006
+cos6_7 dhost=venus007
+cos6_8 dhost=venus008
+
+[ubuntu12]
+u12_1 dhost=venus001
+u12_2 dhost=venus002
+u12_3 dhost=venus003
+u12_4 dhost=venus004
+u12_5 dhost=venus005
+u12_6 dhost=venus006
+u12_7 dhost=venus007
+u12_8 dhost=venus008
+
+[d_hosts:children]
+centos6
+centos7
+ubuntu12
