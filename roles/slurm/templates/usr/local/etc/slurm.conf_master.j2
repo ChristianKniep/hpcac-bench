@@ -10,7 +10,7 @@
 # 
 DebugFlags=NO_CONF_HASH
 ControlMachine={{ groups['p_master'][0] }}
-ControlAddr={{ hostvars[groups['p_master'][0]]['ansible_docker0']['ipv4']['address'] }}
+ControlAddr=172.17.42.1
 #BackupController=slurm2
 #BackupAddr=192.168.160.6
 # 
