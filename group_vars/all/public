@@ -9,3 +9,5 @@ job_size: 72
 job_time: 300
 
 nfs_share_dir: /opt/nfs/
+
+slurm_cluster_name: venus

@@ -13,12 +13,16 @@
     create=True'
 
 - name: send hostname to etcd
-  tags: dns
+  tags: 
+  - dns
+  - etcd
   action: 'shell curl -sL {{ etcd_skydns_url }}/{{ inventory_hostname_short }} -XPUT -d value=''{"Host": "{{ ansible_all_ipv4_addresses[0] }}"}'''
   when: dhost != slurm_master
 
 - name: send hostname to etcd
-  tags: dns
+  tags: 
+  - dns
+  - etcd
   action: 'shell curl -sL {{ etcd_skydns_url }}/{{ inventory_hostname_short }} -XPUT -d value=''{"Host": "{{ ansible_all_ipv4_addresses[1] }}"}'''
   when: dhost == slurm_master
   #uri: url={{ etcd_skydns_url }}/{{ inventory_hostname_short }}

@@ -3,4 +3,4 @@
 - include: setup_ntp.yml
   when: not is_container is defined
 - include: users.yml
-- include: setup_hpcg.yml
+#- include: setup_hpcg.yml

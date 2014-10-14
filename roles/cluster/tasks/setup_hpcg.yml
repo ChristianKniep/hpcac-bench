@@ -6,10 +6,10 @@
 #  - input_files
   - job_scripts
 
-- name: create job scripts
-  tags: hpcg
-  include: create_job_scripts.yml
-  when: is_nfs_server is defined
+#- name: create job scripts
+#  tags: hpcg
+#  include: create_job_scripts.yml
+#  when: is_nfs_server is defined
 
 - name: copy helper scripts
   tags: hpcg

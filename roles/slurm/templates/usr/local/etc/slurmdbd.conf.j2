@@ -1,0 +1,22 @@
+#
+# Sample /etc/slurmdbd.conf
+#
+ArchiveEvents=yes
+ArchiveJobs=yes
+ArchiveSteps=no
+ArchiveSuspend=no
+#ArchiveScript=/usr/sbin/slurm.dbd.archive
+AuthInfo=/var/run/munge/munge.socket.2
+AuthType=auth/munge
+DbdHost={{ slurm_master }}
+DebugLevel=4
+PurgeEventAfter=1month
+PurgeJobAfter=12month
+PurgeStepAfter=1month
+PurgeSuspendAfter=1month
+LogFile=/var/log/slurm/slurmdbd.log
+PidFile=/var/run/slurmdbd.pid
+SlurmUser=slurm
+StoragePass={{ slurmdbd_pw }}
+StorageType=accounting_storage/mysql
+StorageUser={{ slurmdbd_user }}

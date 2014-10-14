@@ -1,3 +1,6 @@
 is_master: true
 is_nfs_server: true
 slurm_conf_template: slurm.conf_master.j2
+slurmdbd_user: slurm
+slurmdbd_pw: slurmdbd
+mysql_root_password: mysql

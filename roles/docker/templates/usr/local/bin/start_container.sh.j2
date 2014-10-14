@@ -44,6 +44,6 @@ if [ ${EC} -ne 0 ];then
     exit ${EC}
 fi
 if [[ $1 =~ .*_1 ]];then
-   IPv4=$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' $1)
+   IPv4=$(docker inspect -f '\{\{ .NetworkSettings.IPAddress \}\}' $1)
    sed -i -e "s/.* ${1}$/${IPv4}    ${1}/" /etc/hosts
 fi

@@ -41,6 +41,63 @@
   - slurm
   supervisorctl: name=munged state=restarted
 
+- name: installp slurm accounting
+  when: is_master is defined
+  yum: pkg={{ item }} state=present
+  tags: 
+  - slurm
+  - sacct
+  with_items:
+     - mariadb-server
+
+- name: Start the MySQL service
+  when: is_master is defined
+  tags: 
+  - slurm
+  - sacct
+  action: service name=mariadb state=started
+
+- name: Configure the initial root credentials (fails if already set)
+  when: is_master is defined
+  tags: 
+  - slurm
+  - sacct
+  action: command mysqladmin -u root password {{ mysql_root_password }} 
+  ignore_errors: yes
+
+- name: Set up slurmDBD database
+  when: is_master is defined
+  tags: 
+  - slurm
+  - sacct
+  command: mysql -u root -pmysql -e "create database slurm_acct_db;"
+  ignore_errors: yes
+
+- name: Grant permissions to slurmDBD database
+  when: is_master is defined
+  tags: 
+  - slurm
+  - sacct
+  action: command mysql -u root -p{{ mysql_root_password }} -D slurm_acct_db -e \
+                        "grant all on slurm_acct_db.* TO '{{ slurmdbd_user }}'@'localhost' identified by '{{ slurmdbd_pw }}' with grant option;"
+
+- name: Grant permissions to slurmDBD database
+  when: is_master is defined
+  tags: 
+  - slurm
+  - sacct
+  action: command mysql -u root -p{{ mysql_root_password }} -D slurm_acct_db -e \
+                        "grant all on slurm_acct_db.* TO '{{ slurmdbd_user }}'@'localhost' identified by '{{ slurmdbd_pw }}' with grant option;"
+
+- name: configure slurmdbd
+  when: is_master is defined 
+  action: template src=usr/local/etc/slurmdbd.conf.j2 dest=/usr/local/etc/slurmdbd.conf owner=root group=root mode=0644
+  tags: 
+  - slurm
+  - sacct
+
+
+## Slurm.conf
 
 - name: configure slurm (master)
   when: is_master is defined 
