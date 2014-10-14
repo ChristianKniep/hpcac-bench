@@ -19,12 +19,5 @@
     - base
   command: setenforce 0
   
-- name: Copy supervisord systemd service
-  tags: base
-  copy: src=usr/lib/systemd/system/supervisord.service dest=/usr/lib/systemd/system/supervisord.service owner=root group=root mode=0644
-
-- name: start supervisord
-  tags: base
-  service: name=supervisord state=started enabled=yes
 
 
