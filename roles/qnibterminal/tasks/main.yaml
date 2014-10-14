@@ -1,0 +1,31 @@
+---
+- name: Ensure docker is started
+  tags:
+  - qnibt
+  action: service name=docker state=started
+
+- name: Restart docker-spotter
+  tags:
+  - qnibt
+  action: service name=docker-spotter state=restarted
+
+- name: remove existing containers
+  tags:
+  - qnibt
+  - debug
+  command: docker rm -f {{ item }}_{{ inventory_hostname[-1] }}
+  with_items:
+  - u12
+  - cos6
+  - cos7
+  ignore_errors: yes
+
+- name: start containers
+  tags:
+  - qnibt
+  - debug
+  command: start_container.sh {{ item }}_{{ inventory_hostname[-1] }}
+  with_items:
+  - u12
+  - cos6
+  - cos7

@@ -1,0 +1,6 @@
+---
+- hosts: p_hosts
+  user: root
+  roles:
+    - qnibterminal
+
