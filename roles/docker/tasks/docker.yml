@@ -53,5 +53,3 @@
 - name: Create container startscript (since docker-py failed for me)
   tags: docker
   template: src=usr/local/bin/start_container.sh.j2 dest=/usr/local/bin/start_container.sh owner=root group=root mode=0755
-
-

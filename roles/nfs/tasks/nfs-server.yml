@@ -12,6 +12,10 @@
   with_items:
     - nfs-utils
 
+- name: start nfs-server
+  tags: nfs
+  service: name=nfs state=started enabled=yes
+  
 - name: add an export
   tags: nfs
   lineinfile: dest=/etc/exports
@@ -19,9 +23,6 @@
               insertafter=EOF
               line="{{ nfs_share_dir }} *(rw,nohide,insecure,no_subtree_check,sync)"
 
-- name: start nfs-server
+- name: restart nfs-server
   tags: nfs
-  service: name=nfs-server
-           state=running
-           enabled=yes
-
+  service: name=nfs state=restarted

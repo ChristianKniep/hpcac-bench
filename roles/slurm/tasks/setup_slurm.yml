@@ -84,6 +84,48 @@
   notify: 
   - restart slurmdbd
   
+## Slurm.conf
+
+- name: configure slurm (master)
+  when: is_master is defined 
+  action: template src=usr/local/etc/{{ slurm_conf_template }} dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
+  tags: 
+  - slurm
+  - cfg
+  notify: 
+  - restart slurmctld
+  - restart slurmd
+
+- name: create slurm directories
+  tags: slurm
+  file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
+
+- name: configure slurmd
+  action: template src=usr/local/etc/{{ slurm_conf_template }} dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
+  when: not is_master is defined  and not is_container
+  tags: 
+  - slurm
+  - cfg
+  notify: restart slurmd
+
+- name: LD_LIBRARY_PATH to find libmunge
+  tags:
+    - env
+  lineinfile:
+    dest=/etc/bashrc
+    line="export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/"
+    regexp=".*export LD_LIBRARY_PATH="
+    owner=root
+    state=present
+    insertafter=EOF
+    create=True
+
+- name: start slurmdbd service
+  tags: 
+  - slurm
+  supervisorctl: name=slurmdbd state=started 
+  
+## setup sacct
 - name: Check for the sacct clusters
   tags:
     - slurm
@@ -131,40 +173,12 @@
   command: sacctmgr -i modify user where name={{ slurm_user }} \
                      cluster={{ slurm_cluster }} set maxjobs={{ slurm_maxjobs }}
 
-## Slurm.conf
-
-- name: configure slurm (master)
-  when: is_master is defined 
-  action: template src=usr/local/etc/{{ slurm_conf_template }} dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
+- name: start slurmctld service
   tags: 
   - slurm
-  - cfg
-  notify: 
-  - restart slurmctld
-  - restart slurmd
+  supervisorctl: name=slurmctld state=started 
 
-- name: create slurm directories
-  tags: slurm
-  file: path=/var/spool/slurmd owner=slurm mode=0755 state=directory
-
-- name: configure slurmd
-  action: template src=usr/local/etc/{{ slurm_conf_template }} dest=/usr/local/etc/slurm.conf owner=root group=root mode=0644
-  when: not is_master is defined  and not is_container
+- name: start slurmd service
   tags: 
   - slurm
-  - cfg
-  notify: restart slurmd
-
-- name: LD_LIBRARY_PATH to find libmunge
-  tags:
-    - env
-  lineinfile:
-    dest=/etc/bashrc
-    line="export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/usr/local/lib/"
-    regexp=".*export LD_LIBRARY_PATH="
-    owner=root
-    state=present
-    insertafter=EOF
-    create=True
-
-
+  supervisorctl: name=slurmd state=started
