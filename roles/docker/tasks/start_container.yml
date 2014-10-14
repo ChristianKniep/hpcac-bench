@@ -10,7 +10,8 @@
   tags:
     - docker
     - container
-  when: run_registry is defined and in docker_ps.stdout.find(' registry:') == -1
+  #when: run_registry is defined and in docker_ps.stdout.find(' registry:') == -1
+  when: docker_ps.stdout.find(' registry:') == -1
   shell: /usr/local/bin/start_container.sh registry
 
 - name: start monster container
