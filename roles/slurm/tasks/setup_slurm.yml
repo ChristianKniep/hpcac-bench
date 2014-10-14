@@ -41,12 +41,11 @@
   - slurm
   supervisorctl: name=munged state=restarted
 
-- name: installp slurm accounting
+- name: install mariadb for slurm accounting
   when: is_master is defined
   yum: pkg={{ item }} state=present
   tags: 
   - slurm
-  - sacct
   with_items:
      - mariadb-server
 
@@ -54,14 +53,12 @@
   when: is_master is defined
   tags: 
   - slurm
-  - sacct
   action: service name=mariadb state=started
 
 - name: Configure the initial root credentials (fails if already set)
   when: is_master is defined
   tags: 
   - slurm
-  - sacct
   action: command mysqladmin -u root password {{ mysql_root_password }} 
   ignore_errors: yes
 
@@ -69,7 +66,6 @@
   when: is_master is defined
   tags: 
   - slurm
-  - sacct
   command: mysql -u root -pmysql -e "create database slurm_acct_db;"
   ignore_errors: yes
 
@@ -77,15 +73,6 @@
   when: is_master is defined
   tags: 
   - slurm
-  - sacct
-  action: command mysql -u root -p{{ mysql_root_password }} -D slurm_acct_db -e \
-                        "grant all on slurm_acct_db.* TO '{{ slurmdbd_user }}'@'localhost' identified by '{{ slurmdbd_pw }}' with grant option;"
-
-- name: Grant permissions to slurmDBD database
-  when: is_master is defined
-  tags: 
-  - slurm
-  - sacct
   action: command mysql -u root -p{{ mysql_root_password }} -D slurm_acct_db -e \
                         "grant all on slurm_acct_db.* TO '{{ slurmdbd_user }}'@'localhost' identified by '{{ slurmdbd_pw }}' with grant option;"
 
@@ -94,8 +81,55 @@
   action: template src=usr/local/etc/slurmdbd.conf.j2 dest=/usr/local/etc/slurmdbd.conf owner=root group=root mode=0644
   tags: 
   - slurm
-  - sacct
+  notify: 
+  - restart slurmdbd
+  
+- name: Check for the sacct clusters
+  tags:
+    - slurm
+  when: is_master is defined
+  command: sacctmgr list cluster
+  register: sacct_mgr_lst_cluster
 
+- name: sacctmgr add cluster
+  tags:
+  - slurm
+  when: is_master is defined and sacct_mgr_lst_cluster.stdout.find("{{ slurm_cluster }}") == -1
+  command: sacctmgr -i add cluster {{ slurm_cluster }}
+
+- name: Check for the sacct accounts
+  tags:
+    - sacct
+    - slurm
+  when: is_master is defined
+  command: sacctmgr list account
+  register: sacct_mgr_lst_acct
+
+- name: sacctmgr add account
+  tags:
+  - slurm
+  when: is_master is defined and sacct_mgr_lst_acct.stdout.find("{{ slurm_acct }}") == -1
+  command: sacctmgr -i add account {{ slurm_acct }}
+
+- name: Check for the sacct users
+  tags:
+    - slurm
+  when: is_master is defined
+  command: sacctmgr list users
+  register: sacct_mgr_lst_user
+
+- name: sacctmgr add user
+  tags:
+  - slurm
+  when: is_master is defined and sacct_mgr_lst_user.stdout.find("{{ slurm_user }}") == -1
+  command: sacctmgr -i add user {{ slurm_user }} DefaultAccount={{ slurm_acct }}
+  
+- name: sacctmgr set maxjobs
+  tags:
+  - sacct
+  - slurm
+  command: sacctmgr -i modify user where name={{ slurm_user }} \
+                     cluster={{ slurm_cluster }} set maxjobs={{ slurm_maxjobs }}
 
 ## Slurm.conf
 
