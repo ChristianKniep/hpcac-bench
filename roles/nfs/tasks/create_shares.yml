@@ -7,12 +7,12 @@
 ---
 - name: create a chome directory to share
   tags: nfs
-  file: path=/opt/nfs/chome/
+  file: path={{ nfs_share_dir }}/chome/
         mode=0755
         state=directory
 
 - name: create a scratch directory to share
   tags: nfs
-  file: path=/opt/nfs/scratch/
+  file: path={{ nfs_share_dir }}/scratch/
         mode=0777
         state=directory
