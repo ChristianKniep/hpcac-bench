@@ -1,5 +1,0 @@
----
-- name: create run_hello_world
-  tags: hpcg
-  action: template src=run_hello_world.sh.j2 dest=/opt/nfs/chome/cluser/job_scripts/run_{{ run_host }}_hello_world.sh owner=cluser group=cluser mode=0755
-
