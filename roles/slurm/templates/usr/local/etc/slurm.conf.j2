@@ -197,4 +197,8 @@ PartitionName=cos7 Nodes={% for host in groups['centos7'] %}{{host}},{%endfor%} 
 NodeName={{host}} CPUs=8
 {% endfor %}
 PartitionName=u12 Nodes={% for host in groups['ubuntu12'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
+{% for host in groups['openfoam13'] %}
+NodeName={{host}} CPUs=8
+{% endfor %}
+PartitionName=of13 Nodes={% for host in groups['openfoam13'] %}{{host}},{%endfor%} MaxTime=INFINITE State=UP Default=YES
 
