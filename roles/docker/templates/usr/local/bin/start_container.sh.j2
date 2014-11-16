@@ -32,7 +32,10 @@ case $1 in
         docker run -d --privileged ${DEV_MOUNTS} -h ${1}.docker ${NET} --name ${1} ${COMPUTE_MOUNT} venus001:5000/qnib/centos6_compute
     ;;
     u12*)
-        docker run -d --privileged ${DEV_MOUNTS} -h ${1}.docker ${NET} --name ${1} ${COMPUTE_MOUNT} venus001:5000/qnib/ubuntu12_compute
+        docker run -d --privileged ${DEV_MOUNTS} -h ${1}.docker ${NET} --name ${1} ${COMPUTE_MOUNT} venus001:5000/qnib/ubuntu12_openfoam
+    ;;
+    of13*)
+        docker run -d --privileged ${DEV_MOUNTS} -h ${1}.docker ${NET} --name ${1} ${COMPUTE_MOUNT} venus001:5000/qnib/ubuntu_openfoam:13.10
     ;;
     *)
         echo "No known container given"
@@ -44,6 +47,6 @@ if [ ${EC} -ne 0 ];then
     exit ${EC}
 fi
 if [[ $1 =~ .*_1 ]];then
-   IPv4=$(docker inspect -f '\{\{ .NetworkSettings.IPAddress \}\}' $1)
+   IPv4=$(docker inspect -f '{{ .NetworkSettings.IPAddress }}' $1)
    sed -i -e "s/.* ${1}$/${IPv4}    ${1}/" /etc/hosts
 fi
