@@ -1,5 +1,0 @@
----
-- name: create run_hpcg script {{ job_size }}_{{ job_time }}
-  tags: hpcg
-  action: template src=run_xhpcg.sh.j2 dest=/opt/nfs/chome/cluser/job_scripts/run_{{ run_host }}_xhpcg_{{ job_size }}_{{ job_time }}.sh owner=cluser group=cluser mode=0755
-

@@ -10,7 +10,14 @@
   tags: base
   service: name=firewalld state=stopped enabled=no
 
-- name: disable selinux
+- name: disable selinux within config
   tags: base
   selinux: state=disabled
+  
+- name: Disable selinux now
+  tags:
+    - base
+  command: setenforce 0
+  
+
 

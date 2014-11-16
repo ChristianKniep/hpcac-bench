@@ -1,17 +1,25 @@
 ---
-#- name: add orangefort key
-#  tags: docker
-#  rpm_key: state=present key=https://secure.orangefort.com/packages/RPM-GPG-KEY-orangefort validate_certs=no
+- name: add orangefort key
+  tags: docker
+  rpm_key: state=present key=https://secure.orangefort.com/packages/RPM-GPG-KEY-orangefort validate_certs=no
 
-#- name: add orangefort repo
-#  tags: docker
-#  yum: state=present name=https://secure.orangefort.com/packages/orangefort-release-el7.rpm 
+- name: add orangefort repo
+  tags: docker
+  yum: state=present name=https://secure.orangefort.com/packages/orangefort-release-el7.rpm 
 
-- name: ensure docker-io is installed (no update)
+- name: ensure docker is installed (no update)
   yum: pkg=docker state=present
   when: ansible_distribution == "CentOS"
   tags:
      - docker
+
+- name: create docker directory 
+  tags: nfs
+  file: path={{ docker_data }}
+        mode=0755
+        owner=root
+        group=root
+        state=directory
 
 - name: write the docker systemd script
   template: src=docker.service.j2 dest=/usr/lib/systemd/system/docker.service
@@ -45,5 +53,3 @@
 - name: Create container startscript (since docker-py failed for me)
   tags: docker
   template: src=usr/local/bin/start_container.sh.j2 dest=/usr/local/bin/start_container.sh owner=root group=root mode=0755
-
-

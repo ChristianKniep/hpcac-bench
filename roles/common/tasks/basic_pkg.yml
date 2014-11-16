@@ -24,6 +24,7 @@
      - tmux
      - screen
      - openmpi
+     - openmpi-devel
      - infiniband-diags 
      - libmlx4
      - perftest
@@ -32,4 +33,6 @@
      - PyYAML
      - python-configobj
      - python-netifaces
+     - gcc-c++
+     - gcc-gfortran
 

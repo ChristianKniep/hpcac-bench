@@ -6,8 +6,8 @@
 - include: nfs-clients.yml 
   vars:
    nfsmount: /scratch
-   nfspath: /opt/nfs/scratch 
+   nfspath: "{{ nfs_share_dir }}/scratch"
 - include: nfs-clients.yml 
   vars:
    nfsmount: /chome
-   nfspath: /opt/nfs/chome 
+   nfspath: "{{ nfs_share_dir }}/chome"

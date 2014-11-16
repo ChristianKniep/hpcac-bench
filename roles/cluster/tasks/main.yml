@@ -3,4 +3,5 @@
 - include: setup_ntp.yml
   when: not is_container is defined
 - include: users.yml
-#- include: setup_hpcg.yml
+- include: create_job_scripts.yml
+  when: is_master is defined

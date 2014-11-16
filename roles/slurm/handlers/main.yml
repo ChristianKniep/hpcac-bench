@@ -3,3 +3,5 @@
   supervisorctl: name=slurmd state=restarted
 - name: restart slurmctld
   supervisorctl: name=slurmctld state=restarted
+- name: restart slurmdbd
+  supervisorctl: name=slurmdbd state=restarted

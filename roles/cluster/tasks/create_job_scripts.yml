@@ -1,26 +1,83 @@
 ---
-- include: create_run_script.yml job_time=150 job_size=32 run_host=bare
-- include: create_run_script.yml job_time=300 job_size=104 run_host=bare
-- include: create_run_script.yml job_time=900 job_size=88 run_host=bare
-- include: create_run_script.yml job_time=900 job_size=96 run_host=bare
-- include: create_run_script.yml job_time=900 job_size=104 run_host=bare
-- include: create_run_script.yml job_time=900 job_size=112 run_host=bare
-- include: create_run_script.yml job_time=900 job_size=120 run_host=bare
-- include: create_run_script.yml job_time=900 job_size=128 run_host=bare
-- include: create_run_script.yml job_time=900 job_size=136 run_host=bare
-- include: create_run_script.yml job_time=900 job_size=144 run_host=bare
-#docker
-- include: create_run_script.yml job_time=150 job_size=32 run_host=docker
-- include: create_run_script.yml job_time=300 job_size=104 run_host=docker
-- include: create_run_script.yml job_time=900 job_size=88 run_host=docker
-- include: create_run_script.yml job_time=900 job_size=96 run_host=docker
-- include: create_run_script.yml job_time=900 job_size=104 run_host=docker
-- include: create_run_script.yml job_time=900 job_size=112 run_host=docker
-- include: create_run_script.yml job_time=900 job_size=120 run_host=docker
-- include: create_run_script.yml job_time=900 job_size=128 run_host=docker
-- include: create_run_script.yml job_time=900 job_size=136 run_host=docker
-- include: create_run_script.yml job_time=900 job_size=144 run_host=docker
 
-# hello world
-- include: create_run_hello_world_script.yml run_host=docker
-- include: create_run_hello_world_script.yml run_host=bare
+
+- name: create a job_script directory
+  tags: jobscripts
+  file: path={{ nfs_share_dir }}/chome/cluser/scripts
+        mode=0755
+        owner=cluser
+        group=cluser
+        state=directory
+        
+- name: copy submit und run script fro template
+  when: is_master is defined
+  tags:
+  - jobscripts
+  template: src=scripts/{{ item }}.j2 dest={{ nfs_share_dir }}/chome/cluser/scripts/{{ item }}
+            owner=cluser group=cluser mode=0755
+  with_items:
+  - sub.sh
+  - run.sh
+
+- name: create xhpcg submit script directory
+  tags: jobscripts
+  file: path={{ nfs_share_dir }}/chome/cluser/scripts/{{ item.partition }}/omp-{{ item.mpi }}/xhpcg/{{ item.size }}/{{ item.time }}/
+        mode=0755
+        owner=cluser
+        group=cluser
+        state=directory
+  with_items:
+  - { partition: 'native', mpi: 'sys', size: '104', time: '3600'  }
+  - { partition: 'cos6', mpi: 'sys', size: '104', time: '3600' }
+  - { partition: 'cos7', mpi: 'sys', size: '104', time: '3600' }
+
+- name: create xhpcg submit script link
+  tags: jobscripts
+  file: src={{ nfs_share_dir }}/chome/cluser/scripts/sub.sh
+        dest={{ nfs_share_dir }}/chome/cluser/scripts/{{ item.partition }}/omp-{{ item.mpi }}/xhpcg/{{ item.size }}/{{ item.time }}/sub.sh
+        owner=cluser
+        group=cluser
+        state=link
+  with_items:
+  - { partition: 'native', mpi: 'sys', size: '104', time: '3600'  }
+  - { partition: 'cos6', mpi: 'sys', size: '104', time: '3600' }
+  - { partition: 'cos7', mpi: 'sys', size: '104', time: '3600' }
+  
+  
+## add hpcg-2.4 source
+- name: create a src directory
+  tags: jobscripts
+  file: path={{ nfs_share_dir }}/chome/cluser/src
+        mode=0755
+        owner=cluser
+        group=cluser
+        state=directory
+
+- name: copy public ssh_key stuff
+  when: is_nfs_server is defined
+  tags:
+  - jobscripts
+  copy: src=src/{{ item }} dest={{ nfs_share_dir }}/chome/cluser/src/{{ item }}
+        mode=0644 owner=cluser group=cluser
+  with_items:
+     - hpcg-2.4.tar.gz
+
+- name: create a build directory
+  tags: jobscripts
+  file: path={{ nfs_share_dir }}/chome/cluser/build/
+        mode=0755
+        owner=cluser
+        group=cluser
+        state=directory
+        
+- name: unpack hpcg
+  tags:
+  - jobscripts
+  command: tar xf {{ nfs_share_dir }}/chome/cluser/src/hpcg-2.4.tar.gz -C {{ nfs_share_dir }}/chome/cluser/build/
+  args:
+    creates: "{{ nfs_share_dir }}/chome/cluser/build/hpcg-2.4"
+
+- name: chown unpacked hpcg
+  tags:
+  - jobscripts
+  command: chown -R cluser {{ nfs_share_dir }}/chome/cluser/build/

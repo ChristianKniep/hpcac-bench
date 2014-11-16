@@ -13,7 +13,7 @@
 - name: create a cluser home directory to share
   tags: user
   when: is_nfs_server is defined
-  file: path=/opt/nfs/chome/cluser
+  file: path={{ nfs_share_dir }}/chome/cluser
         mode=0755
         owner=cluser
         group=cluser
@@ -22,7 +22,7 @@
 - name: create a clusers ssh directory
   tags: user
   when: is_nfs_server is defined
-  file: path=/opt/nfs/chome/cluser/.ssh
+  file: path={{ nfs_share_dir }}/chome/cluser/.ssh
         mode=0700
         owner=cluser
         group=cluser
@@ -31,7 +31,7 @@
 - name: copy ssh_key
   when: is_nfs_server is defined
   tags: user
-  copy: src=ssh/{{ item }} dest=/opt/nfs/chome/cluser/.ssh/{{ item }} 
+  copy: src=ssh/{{ item }} dest={{ nfs_share_dir }}/chome/cluser/.ssh/{{ item }} 
         mode=0600 owner=cluser group=cluser
   with_items:
      - id_rsa
@@ -39,7 +39,7 @@
 - name: copy public ssh_key stuff
   when: is_nfs_server is defined
   tags: user
-  copy: src=ssh/{{ item }} dest=/opt/nfs/chome/cluser/.ssh/{{ item }} 
+  copy: src=ssh/{{ item }} dest={{ nfs_share_dir }}/chome/cluser/.ssh/{{ item }} 
         mode=0644 owner=cluser group=cluser
   with_items:
      - id_rsa.pub
@@ -49,7 +49,7 @@
 - name: copy .bash*
   when: is_nfs_server is defined
   tags: user
-  copy: src=cluser/{{ item }} dest=/opt/nfs/chome/cluser/.{{ item }}
+  copy: src=cluser/{{ item }} dest={{ nfs_share_dir }}/chome/cluser/.{{ item }}
         mode=0644 owner=cluser group=cluser
   with_items:
   - bashrc

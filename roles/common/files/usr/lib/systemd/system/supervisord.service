@@ -1,0 +1,10 @@
+[Unit]
+Description=supervisord - service mgmt
+
+[Service]
+Type=forking
+ExecStart=/usr/bin/supervisord -c /etc/supervisord.conf
+Restart=on-abort
+
+[Install]
+WantedBy=multi-user.target

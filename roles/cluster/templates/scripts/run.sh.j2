@@ -1,5 +1,5 @@
 #!/bin/bash
-#SBATCH --ntasks-per-node=8
+#SBATCH --ntasks-per-node={{ core_count }}
 #SBATCH --workdir=SED_WORKDIR
 #SBATCH --job-name=SED_JOB_NAME
 #SBATCH --partition=SED_SLURM_PARTITION
@@ -38,6 +38,22 @@ else
     echo "unrecogniced mpi version '${MPI_VER}'"
     exit 1
 fi
+
+JOB_MPI_DIR=/chome/cluser/build/hpcg-2.4/${SLURM_PARTITION}_${MPI_VER}
+JOB_MPI_BIN=${JOB_MPI_DIR}/bin/xhpcg
+if [ ! -f ${JOB_MPI_BIN} ];then
+    rm -rf ${JOB_MPI_DIR}
+    mkdir -p ${JOB_MPI_DIR}
+    cd ${JOB_MPI_DIR}
+    ../configure MPI_GCC_OMP |tee configure.log
+    make |tee make.log
+    EC=$?
+    if [ ${EC} -ne 0 ];then
+        echo "Compilation went wrong... :("
+        exit ${EC}
+    fi
+fi
+
 echo "START_DATE=$(date +'%F_%H:%M:%S')" >> job.cfg
 echo "SLURM_NODELIST=${SLURM_NODELIST}" >> job.cfg
 echo "SLURM_JOBID=${SLURM_JOBID}" >> job.cfg
@@ -46,7 +62,7 @@ echo "SLURM_JOBID=${SLURM_JOBID}" >> job.cfg
 START_TIME=$(date +%s)
 echo "START_TIME=${START_TIME}"
 echo "## $(date +'%F %H:%M:%S') Start mpirun with '${PROB_SIZE}^3 in ${JOB_TIME}sec'"
-mpirun --mca btl "self,openib"  /chome/cluser/hpcg-2.4/${OS_BASE}${OS_VER}_${MPI_VER}/bin/xhpcg
+mpirun --mca btl "{{ mpirun_btl }}"  ${JOB_MPI_BIN}
 EC=$?
 echo "## $(date +'%F %H:%M:%S') Job ends"
 if [ ${EC} -eq 0 ];then
