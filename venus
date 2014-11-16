@@ -51,7 +51,18 @@ u12_6 dhost=venus006
 u12_7 dhost=venus007
 u12_8 dhost=venus008
 
+[openfoam13]
+of13_1 dhost=venus001
+of13_2 dhost=venus002
+of13_3 dhost=venus003
+of13_4 dhost=venus004
+of13_5 dhost=venus005
+of13_6 dhost=venus006
+of13_7 dhost=venus007
+of13_8 dhost=venus008
+
 [d_hosts:children]
 centos6
 centos7
 ubuntu12
+openfoam13
