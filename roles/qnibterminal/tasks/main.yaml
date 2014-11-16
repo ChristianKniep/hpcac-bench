@@ -1,4 +1,15 @@
 ---
+- name: start munged
+  tags:
+  - qnibt
+  supervisorctl: name=munged state=started
+
+- name: start slurmd
+  tags:
+  - qnibt
+  supervisorctl: name=slurmd state=started
+
+
 - name: Ensure docker is started
   tags:
   - qnibt
